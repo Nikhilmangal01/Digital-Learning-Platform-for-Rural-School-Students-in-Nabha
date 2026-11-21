@@ -73,3 +73,8 @@ __pycache__/
 # Virtual environment
 venv/
 .venv/
+
+# Ignore all environment files in every folder
+**/.env
+**/.env.*
+!.env.example
