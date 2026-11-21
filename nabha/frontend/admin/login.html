@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Login - Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      // Auto-redirect if already logged in as admin
+      if (S.token && S.user && S.user.role === 'admin') {
+        window.location.href = '/admin/dashboard.html';
+      }
+
+      function render() {
+        document.getElementById("app").innerHTML = `
+          ${hdr()}
+          <div class="wrap" style="flex:1">
+            <div class="auth-container">
+              <div style="text-align:center;margin-bottom:20px">
+                <span style="font-size:2.4rem">🛠️</span>
+                <h2 style="margin:6px 0">${t("admin")} ${t("login")}</h2>
+                <small style="color:var(--sub)">${t("app")}</small>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <label style="font-weight:600;font-size:0.9rem">${t("username")}</label>
+                <input id="adm_uname" placeholder="${t("username")}" value="admin" />
+
+                <label style="font-weight:600;font-size:0.9rem">${t("password")}</label>
+                <input id="adm_pw" type="password" placeholder="${t("password")}" value="admin123" />
+
+                <button class="pri" onclick="doLogin()" style="margin-top:14px;padding:12px;background:linear-gradient(135deg,#8b5cf6,#7c3aed)">🚀 ${t("login")}</button>
+              </div>
+
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--b);display:flex;justify-content:space-between;font-size:0.9rem">
+                <a href="/" class="nav-link">← ${t("back")} to Home</a>
+                <a href="/teacher/login.html" class="nav-link">👩‍🏫 Teacher Login</a>
+              </div>
+            </div>
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      async function doLogin() {
+        const uEl = g("adm_uname");
+        const pEl = g("adm_pw");
+        if (!uEl || !pEl) return;
+        const username = uEl.value.trim();
+        const password = pEl.value;
+        if (!username || !password) {
+          alert("Please fill in username and password");
+          return;
+        }
+        showToast("Logging in as admin...");
+        const res = await api("/api/login", "POST", { username, password, role: "admin" });
+        if (res && res.token) {
+          S.token = res.token;
+          S.user = res.user;
+          localStorage.token = res.token;
+          localStorage.user = JSON.stringify(res.user);
+          window.location.href = "/admin/dashboard.html";
+        } else {
+          alert((res && res.error) ? t(res.error) : t("wrong"));
+        }
+      }
+
+      render();
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,768 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Teacher Dashboard - Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+    <style>
+      /* Embedded infallible styling for Teacher Quiz Builder */
+      .quiz-builder-card {
+        margin: 20px 0 !important;
+        background: #ffffff !important;
+        border-radius: 12px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-left: 5px solid #10b981 !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+        padding: 22px !important;
+      }
+      .quiz-question-box {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        padding: 16px !important;
+        margin-bottom: 16px !important;
+      }
+      .quiz-lang-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 10px !important;
+        margin: 8px 0 14px !important;
+      }
+      .quiz-opt-row {
+        display: grid !important;
+        grid-template-columns: 26px 30px 1fr 1fr 1fr !important;
+        gap: 10px !important;
+        align-items: center !important;
+        padding: 8px 12px !important;
+        background: #ffffff !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        margin-bottom: 8px !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s ease !important;
+      }
+      .quiz-opt-row.correct {
+        background: #ecfdf5 !important;
+        border-color: #10b981 !important;
+      }
+      .quiz-opt-row input[type="radio"] {
+        width: 18px !important;
+        height: 18px !important;
+        min-width: 18px !important;
+        max-width: 18px !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        accent-color: #10b981 !important;
+      }
+      .quiz-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 26px !important;
+        height: 26px !important;
+        border-radius: 50% !important;
+        font-weight: 700 !important;
+        font-size: 0.82rem !important;
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        border: 1px solid #cbd5e1 !important;
+        flex-shrink: 0 !important;
+      }
+      .quiz-opt-row.correct .quiz-badge {
+        background: #10b981 !important;
+        color: #ffffff !important;
+        border-color: #10b981 !important;
+      }
+      .quiz-opt-row input[type="text"],
+      .quiz-lang-grid input[type="text"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 8px 12px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        font-size: 0.9rem !important;
+        color: #1e293b !important;
+        background: #ffffff !important;
+      }
+      .quiz-opt-row input[type="text"]:focus,
+      .quiz-lang-grid input[type="text"]:focus {
+        border-color: #10b981 !important;
+        outline: none !important;
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+      }
+      @media (max-width: 768px) {
+        .quiz-opt-row {
+          grid-template-columns: 26px 30px 1fr !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      // Auth Guard
+      if (!checkAuth('teacher', '/teacher/login.html')) {
+        // redirected
+      }
+      if (S.user && S.user.role === 'teacher' && S.user.approved === false) {
+        alert("⏳ Your account is pending Admin approval. Redirecting to login...");
+        localStorage.clear();
+        window.location.href = '/teacher/login.html';
+      }
+
+      let editLessonId = null;
+      let quizDraft = { questions: [] };
+      let showAddLesson = false;
+      let curriculaList = [];
+
+      async function boot() {
+        const [c, stu, a, currRes] = await Promise.all([
+          api("/api/content"),
+          api("/api/teacher/students"),
+          api("/api/announcements"),
+          api("/api/public/curricula"),
+        ]);
+        if (c && c.error === 'wait') {
+          alert("⏳ Your account is pending Admin approval. Redirecting to login...");
+          localStorage.clear();
+          window.location.href = '/teacher/login.html';
+          return;
+        }
+        if (c) S.c = c;
+        if (stu) S.stu = stu;
+        if (a) S.ann = a;
+        if (currRes && currRes.curricula) curriculaList = currRes.curricula;
+        render();
+      }
+
+      function profileV() {
+        const u = S.user || {};
+        const teachSubj = normSubj(u.subject || "Maths");
+        const teachCls = u.class || 8;
+        return `
+        <div class="card" style="margin:16px 0;background:var(--card,#f9fafb);border-left:4px solid var(--p,#3b82f6)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h3 style="margin:0">👤 ${t("editProfile")}</h3>
+            <button onclick="S.profile=false;render()" style="padding:4px 8px;font-size:12px">✖️ ${t("close")}</button>
+          </div>
+          <p style="font-size:0.85rem;color:var(--sub);margin:0 0 12px">${t("profileHint")}</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+            <div>
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">${t("name")}</label>
+              <input id="prof_name" value="${esc(u.name || "")}" placeholder="${t("name")}" style="width:100%" />
+            </div>
+            <div>
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">${t("username")}</label>
+              <input id="prof_uname" value="${esc(u.username || "")}" placeholder="${t("username")}" style="width:100%" />
+            </div>
+            <div>
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">${t("password")}</label>
+              <input id="prof_pw" type="password" placeholder="${t("newPasswordOptional")}" style="width:100%" />
+            </div>
+          </div>
+          <div style="background:#eef2ff;padding:8px 12px;border-radius:6px;font-size:0.85rem;color:#3730a3;margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <div>🔒 <b>${t("subject")}:</b> ${t(teachSubj)}</div>
+            <div>🔒 <b>${t("assignedClass")}:</b> ${t("cls")} ${teachCls}</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <b>📜 Curriculum Board:</b>
+              <select id="prof_curriculum" style="padding:4px 8px;border-radius:6px;border:1px solid #c7d2fe;font-weight:600">
+                ${(curriculaList.length ? curriculaList : [{ code: 'PSEB', name: 'Punjab School Education Board' }, { code: 'CBSE', name: 'Central Board of Secondary Education' }]).map(c => `
+                  <option value="${c.code}" ${(u.curriculumCode || 'PSEB') === c.code ? 'selected' : ''}>${c.code} - ${c.name}</option>
+                `).join('')}
+              </select>
+            </div>
+            <div style="width:100%"><small>${t("adminOnlyNotice")}</small></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="pri" onclick="saveMyProfile()">💾 ${t("save")}</button>
+            <button onclick="S.profile=false;render()">❌ ${t("cancel")}</button>
+          </div>
+        </div>`;
+      }
+
+      async function saveMyProfile() {
+        const nEl = g("prof_name");
+        const uEl = g("prof_uname");
+        const pEl = g("prof_pw");
+        const currEl = g("prof_curriculum");
+        if (!nEl || !uEl) return;
+        const name = nEl.value.trim();
+        const username = uEl.value.trim();
+        const password = pEl ? pEl.value : "";
+        const curriculumCode = currEl ? currEl.value : "PSEB";
+        if (!name || !username) {
+          alert(t("fillRequiredFields"));
+          return;
+        }
+        showToast("Saving profile...");
+        const res = await api("/api/user/profile", "POST", { name, username, password, curriculumCode });
+        if (res && res.user) {
+          S.user = res.user;
+          localStorage.user = JSON.stringify(res.user);
+          S.profile = false;
+          showToast(t("profileSaved"));
+          await boot();
+        } else {
+          alert((res && res.error) ? t(res.error) : "Failed to update profile");
+        }
+      }
+
+      function openQuizBuilder(lessonId) {
+        const existing = (S.c && S.c.quizzes || []).find((x) => x.lesson == lessonId);
+        if (existing && existing.q) {
+          quizDraft = {
+            lessonId,
+            questions: existing.q.map((x) => ({
+              q: typeof x.q === "object" ? { en: x.q.en || "", hi: x.q.hi || "", pa: x.q.pa || "" } : { en: x.q, hi: x.q, pa: x.q },
+              o: (x.o || []).map((o) => typeof o === "object" ? { en: o.en || "", hi: o.hi || "", pa: o.pa || "" } : { en: o, hi: o, pa: o }),
+              a: x.a || 0,
+            })),
+          };
+        } else {
+          quizDraft = {
+            lessonId,
+            questions: [
+              {
+                q: { en: "", hi: "", pa: "" },
+                o: [
+                  { en: "", hi: "", pa: "" },
+                  { en: "", hi: "", pa: "" },
+                  { en: "", hi: "", pa: "" },
+                  { en: "", hi: "", pa: "" },
+                ],
+                a: 0,
+              },
+            ],
+          };
+        }
+        render();
+      }
+
+      async function saveQuiz(lessonId) {
+        if (!quizDraft || !quizDraft.questions || !quizDraft.questions.length) {
+          alert(t("fillQuizPrompt"));
+          return;
+        }
+        for (let i = 0; i < quizDraft.questions.length; i++) {
+          const quest = quizDraft.questions[i];
+          const qText = (quest.q.en || quest.q.hi || quest.q.pa || "").trim();
+          if (!qText) {
+            alert(t("fillQuizPrompt") + " (Question #" + (i + 1) + ")");
+            return;
+          }
+          const validOpts = quest.o.filter((opt) => (opt.en || opt.hi || opt.pa || "").trim());
+          if (validOpts.length < 2) {
+            alert(t("fillQuizPrompt") + " (Question #" + (i + 1) + ")");
+            return;
+          }
+        }
+        showToast("Saving quiz...");
+        const res = await api("/api/teacher/quiz", "POST", {
+          lessonId,
+          questions: quizDraft.questions,
+        });
+        if (res && (res.ok || res.quiz || res.id)) {
+          showToast(t("synced"));
+          quizDraft = { questions: [] };
+          await boot();
+        } else {
+          alert((res && res.error) ? t(res.error) : "Failed to save quiz");
+        }
+      }
+
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadFileHelper(file) {
+        if (!file) return null;
+        showToast(t("uploading") || "Uploading file...");
+        const base64Data = await readFileAsBase64(file);
+        const res = await api("/api/upload", "POST", {
+          filename: file.name,
+          data: base64Data,
+          title: file.name
+        });
+        if (res && res.ok && res.attachment) {
+          showToast(t("uploadSuccess") || "File uploaded!");
+          return res.attachment;
+        } else {
+          alert((res && res.message) || "Failed to upload file");
+          return null;
+        }
+      }
+
+      async function deleteLessonAttachment(lessonId, attachmentId) {
+        if (!confirm("Are you sure you want to delete this attachment?")) return;
+        showToast("Deleting attachment...");
+        const res = await api("/api/teacher/lesson/attachment/delete", "POST", {
+          lessonId,
+          attachmentId
+        });
+        if (res && res.ok) {
+          showToast("Attachment deleted!");
+          await boot();
+        } else {
+          alert("Could not delete attachment");
+        }
+      }
+
+      async function addL() {
+        try {
+          const enEl = g("tl_en");
+          const hiEl = g("tl_hi");
+          const paEl = g("tl_pa");
+          const cntEnEl = g("tl_cnt_en");
+          const cntHiEl = g("tl_cnt_hi");
+          const cntPaEl = g("tl_cnt_pa");
+          const fileEl = g("tl_file");
+          const driveEl = g("tl_drive");
+
+          const en = enEl ? enEl.value.trim() : "";
+          const hi = hiEl ? hiEl.value.trim() : "";
+          const pa = paEl ? paEl.value.trim() : "";
+
+          const cnt_en = cntEnEl ? cntEnEl.value.trim() : "";
+          const cnt_hi = cntHiEl ? cntHiEl.value.trim() : "";
+          const cnt_pa = cntPaEl ? cntPaEl.value.trim() : "";
+          const driveLink = driveEl ? driveEl.value.trim() : "";
+
+          if (!en && !hi && !pa) {
+            alert("Please enter lesson title in at least one language");
+            return;
+          }
+
+          const teachSubj = normSubj((S.user && S.user.subject) || "Maths");
+          const teachCls = (S.user && S.user.class) || 8;
+
+          const attachments = [];
+          if (fileEl && fileEl.files && fileEl.files[0]) {
+            const uploadedAtt = await uploadFileHelper(fileEl.files[0]);
+            if (uploadedAtt) attachments.push(uploadedAtt);
+          }
+          if (driveLink) {
+            attachments.push({
+              id: "att_link_" + Date.now(),
+              type: "link",
+              driveLink: driveLink,
+              url: driveLink,
+              title: "Google Drive Resource",
+              filename: "Google Drive Resource",
+              uploadedAt: new Date().toISOString()
+            });
+          }
+
+          showToast("Adding lesson...");
+          const res = await api("/api/teacher/lesson", "POST", {
+            t_en: en,
+            t_hi: hi,
+            t_pa: pa,
+            cnt_en,
+            cnt_hi,
+            cnt_pa,
+            s: teachSubj,
+            c: teachCls,
+            driveLink,
+            attachments,
+          });
+
+          if (res && res.error) {
+            alert("Error saving lesson: " + (t(res.error) || res.error));
+            return;
+          }
+
+          showToast("Lesson added successfully!");
+          showAddLesson = false;
+          await boot();
+        } catch (e) {
+          console.error("addL error:", e);
+          alert("Error: " + e.message);
+        }
+      }
+
+      async function saveEditL(id) {
+        try {
+          const enEl = g("etl_en_" + id);
+          const hiEl = g("etl_hi_" + id);
+          const paEl = g("etl_pa_" + id);
+          const cntEnEl = g("etl_cnt_en_" + id);
+          const cntHiEl = g("etl_cnt_hi_" + id);
+          const cntPaEl = g("etl_cnt_pa_" + id);
+          const fileEl = g("etl_file_" + id);
+          const driveEl = g("etl_drive_" + id);
+
+          const en = enEl ? enEl.value.trim() : "";
+          const hi = hiEl ? hiEl.value.trim() : "";
+          const pa = paEl ? paEl.value.trim() : "";
+
+          const cnt_en = cntEnEl ? cntEnEl.value.trim() : "";
+          const cnt_hi = cntHiEl ? cntHiEl.value.trim() : "";
+          const cnt_pa = cntPaEl ? cntPaEl.value.trim() : "";
+          const driveLink = driveEl ? driveEl.value.trim() : "";
+
+          if (!en && !hi && !pa) {
+            alert("Please enter lesson title in at least one language");
+            return;
+          }
+
+          const teachSubj = normSubj((S.user && S.user.subject) || "Maths");
+          const teachCls = (S.user && S.user.class) || 8;
+
+          // Preserve current attachments and append newly uploaded ones
+          const allLessons = (S.c && Array.isArray(S.c.lessons)) ? S.c.lessons : [];
+          const currentL = allLessons.find(x => x.id == id);
+          const attachments = (currentL && Array.isArray(currentL.attachments)) ? [...currentL.attachments] : [];
+
+          if (fileEl && fileEl.files && fileEl.files[0]) {
+            const uploadedAtt = await uploadFileHelper(fileEl.files[0]);
+            if (uploadedAtt) attachments.push(uploadedAtt);
+          }
+
+          if (driveLink && !attachments.some(a => a.driveLink === driveLink)) {
+            attachments.push({
+              id: "att_link_" + Date.now(),
+              type: "link",
+              driveLink: driveLink,
+              url: driveLink,
+              title: "Google Drive Resource",
+              filename: "Google Drive Resource",
+              uploadedAt: new Date().toISOString()
+            });
+          }
+
+          showToast("Saving lesson...");
+          const res = await api("/api/teacher/lesson/update", "POST", {
+            id,
+            t_en: en,
+            t_hi: hi,
+            t_pa: pa,
+            cnt_en,
+            cnt_hi,
+            cnt_pa,
+            s: teachSubj,
+            c: teachCls,
+            driveLink,
+            attachments,
+          });
+
+          if (res && res.error) {
+            alert("Error updating lesson: " + (t(res.error) || res.error));
+            return;
+          }
+
+          showToast("Lesson updated successfully!");
+          editLessonId = null;
+          await boot();
+        } catch (e) {
+          console.error("saveEditL error:", e);
+          alert("Error: " + e.message);
+        }
+      }
+
+      async function deleteLesson(id, title) {
+        if (!confirm("Are you sure you want to delete lesson: " + title + "?")) return;
+        showToast("Deleting lesson...");
+        await api("/api/teacher/lesson/delete", "POST", { id });
+        await boot();
+      }
+
+      async function postA() {
+        const m = g("ann_msg");
+        if (!m || !m.value.trim()) return;
+        const msg = m.value.trim();
+        showToast("Posting announcement...");
+        await api("/api/announcements", "POST", { m_en: msg, m_hi: msg, m_pa: msg });
+        m.value = "";
+        await boot();
+      }
+
+      function render() {
+        if (!S.c) {
+          document.getElementById("app").innerHTML = hdr() + `<div class="wrap" style="flex:1"><p class="sub">${t("load")}</p></div>` + footerV();
+          return;
+        }
+
+        const u = S.user || {};
+        const teachSubj = normSubj(u.subject || "Maths");
+        const teachCls = u.class || 8;
+        const myLessons = (S.c.lessons || []).filter((x) => x.authorId === u.id);
+        const myStudents = S.stu || [];
+
+        document.getElementById("app").innerHTML = `
+          ${hdr()}
+          <div class="wrap" style="flex:1">
+            <div class="banner">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+                <div>
+                  <h2 style="margin:0">${esc(u.name)}</h2>
+                  <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center">
+                    <span class="pill">📚 ${t(teachSubj)}</span>
+                    <span class="pill" style="background:#ffffff30">🎓 ${t("cls")} ${teachCls}</span>
+                    <span class="pill" style="background:#ffffff35;font-weight:700">📜 Board: ${esc(u.curriculumCode || "PSEB")}</span>
+                    <span class="pill" style="background:#ffffff20">👥 ${myStudents.length} ${t("students")}</span>
+                  </div>
+                </div>
+                <button onclick="S.profile=!S.profile;render()" style="background:#ffffff24;border-color:#ffffff40;color:#fff">
+                  ⚙️ ${t("editProfile")}
+                </button>
+              </div>
+            </div>
+
+            ${S.profile ? profileV() : ""}
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px">
+              <h3 style="margin:0">📚 ${t("myLessons")} (${myLessons.length})</h3>
+              <button class="pri" onclick="showAddLesson=!showAddLesson;render()" style="margin:0">
+                ${showAddLesson ? "✖️ " + t("cancel") : "➕ " + t("add")}
+              </button>
+            </div>
+
+            ${showAddLesson ? `
+              <div class="card" style="margin-bottom:16px;background:var(--card,#f8fafc);border-left:4px solid var(--p,#3b82f6)">
+                <h4 style="margin:0 0 10px;color:var(--p,#3b82f6)">✨ ${t("add")}</h4>
+                <div style="background:#eef2ff;padding:8px 12px;border-radius:6px;font-size:0.85rem;color:#3730a3;margin-bottom:12px;display:flex;gap:12px">
+                  <span>🔒 <b>${t("subject")}:</b> ${t(teachSubj)}</span>
+                  <span>🔒 <b>${t("cls")}:</b> ${t("cls")} ${teachCls}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <input id="tl_pa" placeholder="ਸ਼ਿਰਲੇਖ (ਪੰਜਾਬੀ)" />
+                  <input id="tl_hi" placeholder="शीर्षक (हिंदी)" />
+                  <input id="tl_en" placeholder="Title (English)" />
+
+                  <h5 style="margin:10px 0 4px">📖 ${t("lessonContent")} (${t("optional")})</h5>
+                  <textarea id="tl_cnt_pa" rows="3" placeholder="ਪਾਠ ਦੀ ਸਮੱਗਰੀ / ਨੋਟਸ (ਪੰਜਾਬੀ)"></textarea>
+                  <textarea id="tl_cnt_hi" rows="3" placeholder="पाठ की सामग्री / नोट्स (हिंदी)"></textarea>
+                  <textarea id="tl_cnt_en" rows="3" placeholder="Lesson content / study notes (English)"></textarea>
+
+                  <h5 style="margin:12px 0 4px">📎 ${t("attachments") || "Notes & Study Materials"} (${t("optional")})</h5>
+                  <div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px">
+                    <div>
+                      <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">📄 ${t("uploadNotes") || "Upload Notes (Image / PDF max 25MB)"}:</label>
+                      <input type="file" id="tl_file" accept=".pdf,image/*" style="font-size:0.85rem" />
+                    </div>
+                    <div>
+                      <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">🔗 ${t("driveLink") || "Google Drive Link"}:</label>
+                      <input id="tl_drive" type="url" placeholder="https://drive.google.com/... (Google Drive Link)" />
+                    </div>
+                  </div>
+
+                  <div style="display:flex;gap:8px;margin-top:8px">
+                    <button class="pri" onclick="addL()">💾 ${t("save")}</button>
+                    <button onclick="showAddLesson=false;render()">❌ ${t("cancel")}</button>
+                  </div>
+                </div>
+              </div>
+            ` : ""}
+
+            ${myLessons.length ? myLessons.map((l) => {
+              const q = (S.c.quizzes || []).find((x) => x.lesson == l.id);
+              if (editLessonId === l.id) {
+                return `
+                  <div class="card" style="margin-bottom:12px;background:var(--card,#f8fafc)">
+                    <h4 style="margin:0 0 8px">✏️ ${t("editLesson")}: ${esc(L(l.t))}</h4>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <input id="etl_pa_${l.id}" value="${esc((l.t && l.t.pa) || "")}" placeholder="ਸ਼ਿਰਲੇਖ (ਪੰਜਾਬੀ)" />
+                      <input id="etl_hi_${l.id}" value="${esc((l.t && l.t.hi) || "")}" placeholder="शीर्षक (हिंदी)" />
+                      <input id="etl_en_${l.id}" value="${esc((l.t && l.t.en) || "")}" placeholder="Title (English)" />
+
+                      <h5 style="margin:10px 0 4px">📖 ${t("lessonContent")}</h5>
+                      <textarea id="etl_cnt_pa_${l.id}" rows="3" placeholder="ਪਾਠ ਸਮੱਗਰੀ (ਪੰਜਾਬੀ)">${esc((l.content && l.content.pa) || (l.cnt && l.cnt.pa) || (l.n && l.n.pa) || "")}</textarea>
+                      <textarea id="etl_cnt_hi_${l.id}" rows="3" placeholder="पाठ सामग्री (हिंदी)">${esc((l.content && l.content.hi) || (l.cnt && l.cnt.hi) || (l.n && l.n.hi) || "")}</textarea>
+                      <textarea id="etl_cnt_en_${l.id}" rows="3" placeholder="Lesson content (English)">${esc((l.content && l.content.en) || (l.cnt && l.cnt.en) || (l.n && l.n.en) || "")}</textarea>
+
+                      <h5 style="margin:12px 0 4px">📎 ${t("attachments") || "Notes & Study Materials"}</h5>
+                      ${(Array.isArray(l.attachments) && l.attachments.length) ? `
+                        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px">
+                          ${l.attachments.map(att => `
+                            <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:6px 10px;font-size:0.85rem">
+                              <span>${att.type === 'pdf' ? '📄' : (att.type === 'image' ? '🖼️' : '🔗')} <b>${esc(att.title || att.filename)}</b> ${att.sizeFormatted ? `<small style="color:#64748b">(${att.sizeFormatted})</small>` : ''}</span>
+                              <div style="display:flex;gap:6px;align-items:center">
+                                <a href="${esc(att.url)}" target="_blank" style="font-size:12px;color:#3b82f6;text-decoration:none">👁️ View</a>
+                                <button type="button" onclick="deleteLessonAttachment(${l.id}, '${esc(att.id)}')" style="font-size:11px;padding:2px 6px;color:#ef4444;background:#fee2e2;border:1px solid #fca5a5;border-radius:4px;cursor:pointer">🗑️ Delete</button>
+                              </div>
+                            </div>
+                          `).join('')}
+                        </div>
+                      ` : `<p class="sub" style="font-size:0.85rem;margin:4px 0">${t("noAttachments") || "No attachments yet."}</p>`}
+
+                      <div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px">
+                        <div>
+                          <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">➕ ${t("uploadNotes") || "Add Note File (Image / PDF)"}:</label>
+                          <input type="file" id="etl_file_${l.id}" accept=".pdf,image/*" style="font-size:0.85rem" />
+                        </div>
+                        <div>
+                          <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">🔗 ${t("driveLink") || "Google Drive Link"}:</label>
+                          <input id="etl_drive_${l.id}" type="url" value="${esc(l.driveLink || '')}" placeholder="https://drive.google.com/..." />
+                        </div>
+                      </div>
+
+                      <div style="display:flex;gap:8px;margin-top:8px">
+                        <button class="pri" onclick="saveEditL(${l.id})">💾 ${t("save")}</button>
+                        <button onclick="editLessonId=null;render()">❌ ${t("cancel")}</button>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }
+              return `
+                <div class="card" style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                  <div>
+                    <b>${esc(L(l.t))}</b><br>
+                    <small style="color:var(--sub)">
+                      ${t(teachSubj)} · ${t("cls")} ${l.c} ${q ? "· 📝 " + (q.q ? q.q.length : 0) + " Qs" : ""}
+                      ${(l.attachments && l.attachments.length) ? ` · 📎 ${l.attachments.length} ${t("attachments") || "Files"}` : (l.driveLink ? ' · 🔗 Drive' : '')}
+                    </small>
+                    ${(() => {
+                      const cText = (l.content && L(l.content)) || (l.cnt && L(l.cnt)) || (l.n && L(l.n)) || "";
+                      return cText ? `<div style="font-size:0.85rem;color:#475569;margin-top:5px;background:#f8fafc;border-left:3px solid #3b82f6;padding:4px 8px;border-radius:4px;max-width:550px">📖 ${esc(cText.length > 120 ? cText.slice(0, 120) + "..." : cText)}</div>` : "";
+                    })()}
+                  </div>
+                  <div style="display:flex;gap:6px">
+                    <button onclick="openQuizBuilder(${l.id})" style="font-size:12px;padding:4px 8px">
+                      ${q ? "✏️ " + t("editQuiz") : "➕ " + t("createQuiz")}
+                    </button>
+                    <button onclick="editLessonId=${l.id};render()" style="font-size:12px;padding:4px 8px">
+                      ✏️ ${t("edit")}
+                    </button>
+                    <button onclick="deleteLesson(${l.id}, '${esc(L(l.t))}')" style="font-size:12px;padding:4px 8px;color:#d9534f">
+                      🗑️ ${t("delete")}
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join("") : `<p class="sub">${t("noMyLessons")}</p>`}
+
+            ${quizDraft && quizDraft.lessonId ? `
+              <div class="card quiz-builder-card">
+                <div class="quiz-builder-header">
+                  <div>
+                    <h3 style="margin:0;color:#059669;display:flex;align-items:center;gap:8px">
+                      📝 ${t("editQuiz")}
+                    </h3>
+                    <small style="color:var(--sub)">Add questions, enter multilingual options, and select the radio button for the correct answer.</small>
+                  </div>
+                  <button onclick="quizDraft={questions:[]};render()" style="padding:4px 8px;font-size:12px">✖️ ${t("close")}</button>
+                </div>
+
+                ${(quizDraft.questions || []).map((quest, qi) => `
+                  <div class="quiz-question-box">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                      <b style="font-size:1rem;color:#1e293b">
+                        <span style="background:#10b981;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.8rem;margin-right:6px">Q${qi + 1}</span>
+                        ${t("question")} #${qi + 1}
+                      </b>
+                      ${quizDraft.questions.length > 1 ? `
+                        <button onclick="quizDraft.questions.splice(${qi}, 1);render()" style="background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;padding:3px 8px;font-size:11px;border-radius:6px;cursor:pointer">
+                          🗑️ ${t("delete")}
+                        </button>
+                      ` : ''}
+                    </div>
+
+                    <label style="font-size:0.82rem;font-weight:600;color:#475569">Question Text (Multilingual):</label>
+                    <div class="quiz-lang-grid">
+                      <input type="text" value="${esc(quest.q.pa || "")}" oninput="quizDraft.questions[${qi}].q.pa=this.value" placeholder="ਸਵਾਲ (ਪੰਜਾਬੀ)" title="Punjabi" />
+                      <input type="text" value="${esc(quest.q.hi || "")}" oninput="quizDraft.questions[${qi}].q.hi=this.value" placeholder="सवाल (हिंदी)" title="Hindi" />
+                      <input type="text" value="${esc(quest.q.en || "")}" oninput="quizDraft.questions[${qi}].q.en=this.value" placeholder="Question (English)" title="English" />
+                    </div>
+
+                    <div style="margin-top:12px">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                        <small style="font-weight:700;color:#334155">${t("options")} (Select radio for correct answer):</small>
+                        <small style="color:#059669;font-weight:600">Correct: Option ${String.fromCharCode(65 + (quest.a || 0))}</small>
+                      </div>
+
+                      ${(quest.o || []).map((opt, oi) => {
+                        const isCorrect = quest.a === oi;
+                        return `
+                          <div class="quiz-opt-row ${isCorrect ? 'correct' : ''}" style="display:grid;grid-template-columns:26px 30px 1fr 1fr 1fr;gap:10px;align-items:center;padding:8px 12px;margin-bottom:8px;border-radius:8px;border:1.5px solid ${isCorrect ? '#10b981' : '#cbd5e1'};background:${isCorrect ? '#ecfdf5' : '#ffffff'};box-sizing:border-box">
+                            <input type="radio" name="qa_${qi}" ${isCorrect ? "checked" : ""} onclick="quizDraft.questions[${qi}].a=${oi};render()" title="Mark as correct answer" style="width:18px!important;height:18px!important;min-width:18px!important;max-width:18px!important;margin:0!important;cursor:pointer;accent-color:#10b981" />
+                            <span class="quiz-badge" style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:0.82rem;background:${isCorrect ? '#10b981' : '#f1f5f9'};color:${isCorrect ? '#ffffff' : '#475569'};border:1px solid ${isCorrect ? '#10b981' : '#cbd5e1'};flex-shrink:0">${String.fromCharCode(65 + oi)}</span>
+                            <input type="text" value="${esc(opt.pa || "")}" oninput="quizDraft.questions[${qi}].o[${oi}].pa=this.value" placeholder="ਵਿਕਲਪ ${String.fromCharCode(65 + oi)} (ਪੰਜਾਬੀ)" style="width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:8px 10px!important;border:1px solid #cbd5e1!important;border-radius:6px!important;font-size:0.9rem!important;background:#fff!important" />
+                            <input type="text" value="${esc(opt.hi || "")}" oninput="quizDraft.questions[${qi}].o[${oi}].hi=this.value" placeholder="विकल्प ${String.fromCharCode(65 + oi)} (हिंदी)" style="width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:8px 10px!important;border:1px solid #cbd5e1!important;border-radius:6px!important;font-size:0.9rem!important;background:#fff!important" />
+                            <input type="text" value="${esc(opt.en || "")}" oninput="quizDraft.questions[${qi}].o[${oi}].en=this.value" placeholder="Option ${String.fromCharCode(65 + oi)} (English)" style="width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:8px 10px!important;border:1px solid #cbd5e1!important;border-radius:6px!important;font-size:0.9rem!important;background:#fff!important" />
+                          </div>
+                        `;
+                      }).join("")}
+                    </div>
+                  </div>
+                `).join("")}
+
+                <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+                  <button onclick="quizDraft.questions.push({q:{en:'',hi:'',pa:''},o:[{en:'',hi:'',pa:''},{en:'',hi:'',pa:''},{en:'',hi:'',pa:''},{en:'',hi:'',pa:''}],a:0});render()" style="background:#f0fdf4;border:1px solid #86efac;color:#166534">
+                    ➕ ${t("addQuestion")}
+                  </button>
+                  <button class="pri" onclick="saveQuiz(${quizDraft.lessonId})">
+                    💾 ${t("saveQuiz")}
+                  </button>
+                  <button onclick="quizDraft={questions:[]};render()">
+                    ❌ ${t("cancel")}
+                  </button>
+                </div>
+              </div>
+            ` : ""}
+
+            <h3 style="margin-top:24px">🎒 ${t("students")} (${t("cls")} ${teachCls} · Subject: ${t(teachSubj)} · Board: ${esc(u.curriculumCode || "PSEB")})</h3>
+            ${myStudents.length ? `
+              <table>
+                <tr>
+                  <th>${t("name")}</th>
+                  <th>${t("cls")}</th>
+                  <th>School</th>
+                  <th>${t(teachSubj)} Lessons</th>
+                  <th>${t(teachSubj)} Progress</th>
+                  <th>Quiz Avg</th>
+                </tr>
+                ${myStudents.map((s) => `
+                  <tr>
+                    <td><b>${esc(s.name)}</b><br><small style="color:var(--sub)">${esc(s.username)}</small></td>
+                    <td>${t("cls")} ${s.class || teachCls}</td>
+                    <td><small style="font-weight:600;color:#1e293b">🏫 ${esc(s.schoolName || "Govt Sen Sec School, Nabha")}</small></td>
+                    <td><b>${s.doneLessons != null ? s.doneLessons : ((s.progress && s.progress.l && s.progress.l.length) || 0)} / ${s.totalLessons != null ? s.totalLessons : myLessons.length}</b></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <div style="flex:1;min-width:70px;height:8px;background:#e2e8f0;border-radius:6px;overflow:hidden">
+                          <div style="width:${s.pct || 0}%;height:100%;background:${(s.pct || 0) >= 75 ? '#10b981' : (s.pct || 0) >= 40 ? '#3b82f6' : '#f59e0b'};border-radius:6px"></div>
+                        </div>
+                        <small style="font-weight:700">${s.pct || 0}%</small>
+                      </div>
+                    </td>
+                    <td><b>${s.avgScore != null ? s.avgScore + "%" : "-"}</b></td>
+                  </tr>
+                `).join("")}
+              </table>
+            ` : `<p class="sub">${t("noStu")}</p>`}
+
+            <h3 style="margin-top:24px">📢 ${t("ann")}</h3>
+            <div style="display:flex;gap:8px;margin-bottom:12px">
+              <input id="ann_msg" placeholder="${t("msg")}" style="flex:1" />
+              <button class="pri" onclick="postA()">${t("post")}</button>
+            </div>
+            ${(S.ann || []).length ? S.ann.map((a) => `
+              <div class="card" style="margin-bottom:8px">
+                <b>${esc(L(a.m))}</b><br>
+                <small style="color:var(--sub)">${new Date(a.at).toLocaleDateString()}</small>
+              </div>
+            `).join("") : `<p class="sub">${t("noAnn")}</p>`}
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      boot();
+    </script>
+  </body>
+</html>

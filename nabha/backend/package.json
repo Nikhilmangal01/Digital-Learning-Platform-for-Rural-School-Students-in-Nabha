@@ -1,0 +1,1 @@
+{"name":"nabha-learning-platform","version":"1.0.0","scripts":{"start":"node backend/server.js","dev":"node backend/server.js"},"dependencies":{"dotenv":"^18.0.10","express":"^4.19.2","mongodb":"^7.9.0"}}

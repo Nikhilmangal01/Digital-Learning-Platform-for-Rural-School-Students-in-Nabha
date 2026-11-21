@@ -1,0 +1,585 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Dashboard - Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      // Auth Guard
+      if (!checkAuth('admin', '/admin/login.html')) {
+        // redirected
+      }
+
+      async function boot() {
+        const [u, c, a, currRes, schRes] = await Promise.all([
+          api("/api/admin/users"),
+          api("/api/content"),
+          api("/api/announcements"),
+          api("/api/admin/curricula"),
+          api("/api/admin/schools"),
+        ]);
+        if (u && u.users) S.users = u.users;
+        else if (u) S.users = u;
+        if (c) S.c = c;
+        if (a) S.ann = a;
+        if (currRes && currRes.curricula) S.curricula = currRes.curricula;
+        if (schRes && schRes.schools) S.schools = schRes.schools;
+        render();
+      }
+
+      async function saveNewCurriculum() {
+        const codeEl = g("nc_code");
+        const nameEl = g("nc_name");
+        const descEl = g("nc_desc");
+        if (!codeEl || !nameEl) return;
+        const code = codeEl.value.trim().toUpperCase();
+        const name = nameEl.value.trim();
+        const description = (descEl && descEl.value.trim()) || "";
+        if (!code || !name) {
+          alert("Please fill Curriculum Code and Name");
+          return;
+        }
+        showToast("Saving curriculum...");
+        const res = await api("/api/admin/curricula", "POST", { code, name, description });
+        if (res && res.error) alert(res.error);
+        else {
+          S.showAddCurriculum = false;
+          boot();
+        }
+      }
+
+      async function deleteCurriculum(code) {
+        if (!confirm(`Are you sure you want to delete curriculum ${code}?`)) return;
+        showToast("Deleting...");
+        const res = await api(`/api/admin/curricula/${code}`, "DELETE");
+        if (res && res.error) alert(res.error);
+        else boot();
+      }
+
+      async function saveNewSchool() {
+        const idEl = g("ns_id");
+        const nameEl = g("ns_name");
+        const currEl = g("ns_curr");
+        const cityEl = g("ns_city");
+        if (!idEl || !nameEl || !currEl) return;
+        const schoolId = idEl.value.trim();
+        const name = nameEl.value.trim();
+        const curriculumCode = currEl.value.trim().toUpperCase();
+        const city = (cityEl && cityEl.value.trim()) || "Nabha";
+        if (!schoolId || !name) {
+          alert("Please fill School ID and School Name");
+          return;
+        }
+        showToast("Saving school...");
+        const res = await api("/api/admin/schools", "POST", { schoolId, name, curriculumCode, city, state: "Punjab" });
+        if (res && res.error) alert(res.error);
+        else {
+          S.showAddSchool = false;
+          boot();
+        }
+      }
+
+      async function deleteSchool(schoolId) {
+        if (!confirm(`Are you sure you want to delete school ${schoolId}?`)) return;
+        showToast("Deleting...");
+        const res = await api(`/api/admin/schools/${schoolId}`, "DELETE");
+        if (res && res.error) alert(res.error);
+        else boot();
+      }
+
+      async function adm(a, id) {
+        const b = { id };
+        if (a === "reset") {
+          b.password = prompt(t("pw") || "Enter new password:");
+          if (!b.password) return;
+        }
+        showToast("Processing...");
+        const endpoint = a === "reset" ? "/api/admin/reset" : "/api/admin/approve";
+        const res = await api(endpoint, "POST", b);
+        if (res && res.error) {
+          alert(t(res.error) || res.error);
+        } else {
+          boot();
+        }
+      }
+
+      function admEdit(id) {
+        S.editU = S.editU === id ? null : id;
+        render();
+      }
+
+      async function admSave(id) {
+        const u = (S.users || []).find((x) => String(x.id) === String(id));
+        if (!u) return;
+        const nameEl = g("eu_name_" + id);
+        const unameEl = g("eu_uname_" + id);
+        if (!nameEl || !unameEl) return;
+        const name = nameEl.value.trim();
+        const username = unameEl.value.trim();
+        if (!name || !username) {
+          alert("Please provide both name and username");
+          return;
+        }
+        const b = { id, name, username };
+        if (u.role === "teacher") {
+          const sEl = g("eu_subj_" + id);
+          if (sEl) b.subject = sEl.value;
+          const cEl = g("eu_cls_teach_" + id);
+          if (cEl) b.class = +cEl.value || 8;
+        } else if (u.role === "student") {
+          const cEl = g("eu_cls_" + id);
+          if (cEl) b.class = +cEl.value || 8;
+        }
+        try {
+          showToast("Saving user...");
+          const res = await api("/api/admin/update-user", "POST", b);
+          if (res && res.error) {
+            alert(t(res.error) || res.error || "Update failed");
+            return;
+          }
+          S.editU = null;
+          boot();
+        } catch (err) {
+          alert("Failed to update user");
+        }
+      }
+
+      async function admDelete(id, name) {
+        name = name || 'this user';
+        if (!confirm((t("confirmDelete") || "Are you sure you want to delete this user?") + "\n\n" + name)) return;
+        showToast("Deleting user...");
+        try {
+          const res = await api("/api/admin/delete-user", "POST", { id });
+          if (res && res.error) {
+            alert(t(res.error) || res.error || "Delete failed");
+          } else {
+            boot();
+          }
+        } catch (err) {
+          alert("Delete failed: " + (err.message || err));
+        }
+      }
+
+      async function postA() {
+        const m = g("ann_msg");
+        if (!m || !m.value.trim()) return;
+        const msg = m.value.trim();
+        showToast("Posting announcement...");
+        await api("/api/announcements", "POST", { m_en: msg, m_hi: msg, m_pa: msg });
+        m.value = "";
+        boot();
+      }
+
+      function render() {
+        const u = S.users || [];
+        const teachers = u.filter((x) => x.role == "teacher");
+        const students = u.filter((x) => x.role == "student");
+        const admins = u.filter((x) => x.role == "admin");
+        const subjects = ["Maths", "Science", "English", "Punjabi"];
+        const classes = [6, 7, 8, 9, 10, 11, 12];
+        const allLessons = (S.c && S.c.lessons) || [];
+        const allQuizzes = (S.c && S.c.quizzes) || [];
+
+        const curTab = S.admTab || "users";
+
+        // Filtering for Lessons & Quizzes
+        const filteredLessons = allLessons.filter((l) => {
+          const matchCls = S.admCls === "all" || String(l.c) === String(S.admCls);
+          const matchSub = S.admSub === "all" || normSubj(l.s) === normSubj(S.admSub);
+          return matchCls && matchSub;
+        });
+
+        const filteredQuizzes = allQuizzes.filter((q) => {
+          const l = allLessons.find((x) => x.id == q.lesson);
+          const lCls = l ? String(l.c) : "";
+          const lSub = l ? normSubj(l.s) : "";
+          const matchCls = S.admCls === "all" || lCls === String(S.admCls);
+          const matchSub = S.admSub === "all" || lSub === normSubj(S.admSub);
+          return matchCls && matchSub;
+        });
+
+        const filterBar = `
+          <div class="card" style="margin:12px 0;padding:12px;background:var(--card,#f8fafc);display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <div style="font-weight:bold;font-size:0.9rem">🔍 ${t("filter")}:</div>
+            <select style="padding:6px 10px;border-radius:6px;border:1px solid var(--border,#cbd5e1);font-weight:600" onchange="S.admCls=this.value;render()">
+              <option value="all" ${S.admCls === "all" ? "selected" : ""}>🎓 ${t("allClasses")}</option>
+              ${classes.map((c) => `<option value="${c}" ${String(S.admCls) === String(c) ? "selected" : ""}>${t("cls")} ${c}</option>`).join("")}
+            </select>
+            <select style="padding:6px 10px;border-radius:6px;border:1px solid var(--border,#cbd5e1);font-weight:600" onchange="S.admSub=this.value;render()">
+              <option value="all" ${S.admSub === "all" ? "selected" : ""}>📚 ${t("allSubjects")}</option>
+              ${subjects.map((s) => `<option value="${s}" ${normSubj(S.admSub) === s ? "selected" : ""}>${t(s)}</option>`).join("")}
+            </select>
+            ${(S.admCls !== "all" || S.admSub !== "all") ? `<button onclick="S.admCls='all';S.admSub='all';render()" style="padding:6px 12px;font-size:0.85rem">🔄 ${t("resetFilters")}</button>` : ""}
+          </div>
+        `;
+
+        let contentHtml = "";
+
+        if (curTab === "lessons") {
+          contentHtml = `
+            ${filterBar}
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px">
+              <h3 style="margin:0">📚 ${t("lessons")} (${filteredLessons.length} / ${allLessons.length})</h3>
+            </div>
+            ${filteredLessons.length ? `<table>
+              <tr>
+                <th>${t("title")}</th>
+                <th>${t("cls")}</th>
+                <th>${t("subject")}</th>
+                <th>${t("teacher")}</th>
+                <th>${t("quizzes")}</th>
+                <th>${t("actions")}</th>
+              </tr>
+              ${filteredLessons.map((l) => {
+                const q = allQuizzes.find((x) => x.lesson == l.id);
+                const isOpen = S.admViewL === l.id;
+                const lContent = (l.content && L(l.content)) || (l.n && L(l.n)) || t("noContent");
+                return `<tr>
+                  <td><b>${esc(L(l.t))}</b></td>
+                  <td><span class="pill" style="font-size:12px;padding:2px 8px;background:var(--s1,#eef2ff)">${t("cls")} ${l.c}</span></td>
+                  <td><span class="pill" style="font-size:12px;padding:2px 8px">${t(normSubj(l.s))}</span></td>
+                  <td>${esc(l.authorName || t("systemLesson"))}</td>
+                  <td>${q ? `<span style="color:#059669;font-weight:bold">📝 ${q.q ? q.q.length : 0} Qs</span>` : `<span style="color:var(--sub)">-</span>`}</td>
+                  <td>
+                    <button onclick="S.admViewL=${isOpen ? "null" : l.id};render()" style="font-size:12px;padding:4px 8px">
+                      ${isOpen ? "❌ " + t("close") : "👁️ " + t("viewContent")}
+                    </button>
+                  </td>
+                </tr>
+                ${isOpen ? `<tr style="background:var(--card,#f9fafb)">
+                  <td colspan="6" style="padding:14px;border-left:4px solid var(--p,#3b82f6)">
+                    <div style="font-weight:bold;margin-bottom:6px;color:var(--p,#3b82f6)">📖 ${esc(L(l.t))} — ${t("lessonContent")}</div>
+                    <div style="white-space:pre-wrap;line-height:1.6;font-size:0.95rem;max-height:300px;overflow-y:auto">${esc(lContent)}</div>
+                  </td>
+                </tr>` : ""}`;
+              }).join("")}
+            </table>` : `<p class="sub" style="padding:16px 0">${t("noLessons")}</p>`}
+          `;
+        } else if (curTab === "quizzes") {
+          contentHtml = `
+            ${filterBar}
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px">
+              <h3 style="margin:0">📝 ${t("quizzes")} (${filteredQuizzes.length} / ${allQuizzes.length})</h3>
+            </div>
+            ${filteredQuizzes.length ? `<table>
+              <tr>
+                <th>${t("lesson")}</th>
+                <th>${t("cls")}</th>
+                <th>${t("subject")}</th>
+                <th>${t("question")}</th>
+                <th>${t("teacher")}</th>
+                <th>${t("actions")}</th>
+              </tr>
+              ${filteredQuizzes.map((q) => {
+                const l = allLessons.find((x) => x.id == q.lesson);
+                const isOpen = S.admViewQ === q.id;
+                return `<tr>
+                  <td><b>${esc(l ? L(l.t) : (t("lesson") + " #" + q.lesson))}</b></td>
+                  <td><span class="pill" style="font-size:12px;padding:2px 8px;background:var(--s1,#eef2ff)">${t("cls")} ${l ? l.c : "-"}</span></td>
+                  <td><span class="pill" style="font-size:12px;padding:2px 8px">${t(normSubj(l ? l.s : ""))}</span></td>
+                  <td><b>${q.q ? q.q.length : 0}</b></td>
+                  <td>${esc((l && l.authorName) || t("systemLesson"))}</td>
+                  <td>
+                    <button onclick="S.admViewQ=${isOpen ? "null" : q.id};render()" style="font-size:12px;padding:4px 8px">
+                      ${isOpen ? "❌ " + t("close") : "👁️ " + t("viewQuestions")}
+                    </button>
+                  </td>
+                </tr>
+                ${isOpen ? `<tr style="background:var(--card,#f9fafb)">
+                  <td colspan="6" style="padding:14px;border-left:4px solid #10b981">
+                    <div style="font-weight:bold;margin-bottom:8px;color:#059669">📝 ${t("quizzes")}: ${esc(l ? L(l.t) : "")} (${q.q ? q.q.length : 0} ${t("question")})</div>
+                    ${(q.q || []).map((quest, qi) => `
+                      <div style="margin-bottom:10px;padding:8px 12px;background:#fff;border-radius:6px;border:1px solid var(--border,#e2e8f0)">
+                        <b>${qi + 1}. ${esc(L(quest.q))}</b>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-top:6px">
+                          ${(quest.o || []).map((opt, oi) => `
+                            <div style="padding:4px 8px;border-radius:4px;font-size:0.9rem;${oi === quest.a ? "background:#10b98120;border:1px solid #10b981;font-weight:bold;color:#059669" : "background:var(--bg,#f8fafc);border:1px solid var(--border,#e2e8f0)"}">
+                              ${oi === quest.a ? "✅ " : "⚪ "}${esc(typeof opt === "string" ? opt : L(opt))}
+                            </div>
+                          `).join("")}
+                        </div>
+                      </div>
+                    `).join("")}
+                  </td>
+                </tr>` : ""}`;
+              }).join("")}
+            </table>` : `<p class="sub" style="padding:16px 0">${t("noQuizzes")}</p>`}
+          `;
+        } else if (curTab === "schools") {
+          const schools = S.schools || [];
+          contentHtml = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+              <div>
+                <h3 style="margin:0">🏫 Registered Schools (${schools.length})</h3>
+                <small style="color:var(--sub)">Super Admin creates schools and assigns which curriculum board each school follows.</small>
+              </div>
+              <button class="pri" onclick="S.showAddSchool=!S.showAddSchool;render()" style="background:#0d9488">
+                ${S.showAddSchool ? "✖️ Cancel" : "➕ Add New School"}
+              </button>
+            </div>
+
+            ${S.showAddSchool ? `
+              <div class="card" style="margin-bottom:16px;background:#f0fdfa;border:1.5px solid #0d9488;border-radius:10px;padding:16px">
+                <h4 style="margin:0 0 10px;color:#0d9488">➕ Create New School & Assign Curriculum Board</h4>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">School ID</label>
+                    <input id="ns_id" placeholder="e.g. SCH_NABHA_03" style="width:100%" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">School Name</label>
+                    <input id="ns_name" placeholder="e.g. Govt High School, Rohti" style="width:100%" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">Curriculum Board Assigned</label>
+                    <select id="ns_curr" style="width:100%;font-weight:600">
+                      ${(S.curricula || []).map(c => `
+                        <option value="${c.code}">📜 ${esc(c.code)} - ${esc(c.name)}</option>
+                      `).join("")}
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">City</label>
+                    <input id="ns_city" value="Nabha" placeholder="City" style="width:100%" />
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button class="pri" onclick="saveNewSchool()" style="background:#0d9488">💾 Save School</button>
+                  <button onclick="S.showAddSchool=false;render()">❌ Cancel</button>
+                </div>
+              </div>
+            ` : ""}
+
+            ${schools.length ? `<table>
+              <tr>
+                <th>School ID</th>
+                <th>School Name</th>
+                <th>City / State</th>
+                <th>Assigned Curriculum</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+              ${schools.map((s) => `
+                <tr>
+                  <td><b>${esc(s.schoolId)}</b></td>
+                  <td><b>${esc(s.name)}</b></td>
+                  <td>${esc(s.city || "Nabha")}, ${esc(s.state || "Punjab")}</td>
+                  <td><span style="background:#0d948815;color:#0d9488;border:1px solid #0d948840;padding:3px 10px;border-radius:12px;font-weight:700;font-size:0.85rem">📜 ${esc(s.curriculumCode || "PSEB")}</span></td>
+                  <td><span class="badge-status">Active</span></td>
+                  <td>
+                    ${s.schoolId === 'SCH_NABHA_01' ? '<small style="color:var(--sub)">Default</small>' : `
+                      <button class="btn-delete" onclick="deleteSchool('${esc(s.schoolId)}')">🗑️ Delete</button>
+                    `}
+                  </td>
+                </tr>
+              `).join("")}
+            </table>` : `<p class="sub">No schools found.</p>`}
+          `;
+        } else if (curTab === "curricula") {
+          const curricula = S.curricula || [];
+          contentHtml = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+              <div>
+                <h3 style="margin:0">📜 Curriculum Boards (${curricula.length})</h3>
+                <small style="color:var(--sub)">Super Admin manages state & national curricula for schools and teachers.</small>
+              </div>
+              <button class="pri" onclick="S.showAddCurriculum=!S.showAddCurriculum;render()" style="background:#0d9488">
+                ${S.showAddCurriculum ? "✖️ Cancel" : "➕ Add New Curriculum"}
+              </button>
+            </div>
+
+            ${S.showAddCurriculum ? `
+              <div class="card" style="margin-bottom:16px;background:#f0fdfa;border:1.5px solid #0d9488;border-radius:10px;padding:16px">
+                <h4 style="margin:0 0 10px;color:#0d9488">➕ Create New Curriculum Board</h4>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">Board Code</label>
+                    <input id="nc_code" placeholder="e.g. ICSE or STATE_BOARD" style="width:100%" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">Curriculum Name</label>
+                    <input id="nc_name" placeholder="e.g. Indian Certificate of Secondary Education" style="width:100%" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.85rem;font-weight:700">Description</label>
+                    <input id="nc_desc" placeholder="Curriculum syllabus guidelines..." style="width:100%" />
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button class="pri" onclick="saveNewCurriculum()" style="background:#0d9488">💾 Save Curriculum</button>
+                  <button onclick="S.showAddCurriculum=false;render()">❌ Cancel</button>
+                </div>
+              </div>
+            ` : ""}
+
+            ${curricula.length ? `<table>
+              <tr>
+                <th>Board Code</th>
+                <th>Curriculum Name</th>
+                <th>Description</th>
+                <th>Classes Supported</th>
+                <th>Actions</th>
+              </tr>
+              ${curricula.map((c) => `
+                <tr>
+                  <td><b style="font-size:1.05rem;color:#0d9488">${esc(c.code)}</b></td>
+                  <td><b>${esc(c.name)}</b></td>
+                  <td><small style="color:var(--sub)">${esc(c.description || "-")}</small></td>
+                  <td><span class="pill-class">${(c.classes || [6, 7, 8, 9, 10, 11, 12]).join(", ")}</span></td>
+                  <td>
+                    ${c.code === 'PSEB' ? '<small style="color:var(--sub)">Default</small>' : `
+                      <button class="btn-delete" onclick="deleteCurriculum('${esc(c.code)}')">🗑️ Delete</button>
+                    `}
+                  </td>
+                </tr>
+              `).join("")}
+            </table>` : `<p class="sub">No curricula found.</p>`}
+          `;
+        } else if (curTab === "ann") {
+          contentHtml = `
+            <h3>📢 ${t("ann")}</h3>
+            <div style="display:flex;gap:8px;margin-bottom:16px">
+              <input id="ann_msg" placeholder="${t("msg")}" style="flex:1" />
+              <button class="pri" onclick="postA()">${t("post")}</button>
+            </div>
+            ${(S.ann || []).length ? S.ann.map((a) => `
+              <div class="card" style="margin-bottom:8px">
+                <b>${esc(L(a.m))}</b><br>
+                <small style="color:var(--sub)">${new Date(a.at).toLocaleDateString()}</small>
+              </div>
+            `).join("") : `<p class="sub">${t("noAnn")}</p>`}
+          `;
+        } else {
+          // Users Tab
+          contentHtml = `
+            <h3>📚 ${t("teachersBySubject")}</h3>
+            <div class="row">
+              ${subjects
+                .map((s) => {
+                  const cnt = teachers.filter((x) => normSubj(x.subject) === s).length;
+                  return `<div class="stat"><b>${cnt}</b>${t(s)}</div>`;
+                })
+                .join("")}
+            </div>
+
+            <h3>👩‍🏫 ${t("teachersDir")} (${teachers.length})</h3>
+            ${teachers.length ? `<table>
+              <tr><th>${t("name")}</th><th>${t("subject")}</th><th>${t("cls")}</th><th>${t("status")}</th><th>${t("actions")}</th></tr>
+              ${teachers
+                .map((x) => {
+                  if (S.editU === x.id) {
+                    return `<tr style="background:var(--card,#f4f6fa)">
+                      <td colspan="5" style="padding:10px">
+                        <div style="font-weight:bold;margin-bottom:6px">✏️ ${t("edit")}: ${esc(x.name)}</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+                          <input id="eu_name_${x.id}" value="${esc(x.name)}" placeholder="${t("name")}" style="flex:1;min-width:140px">
+                          <input id="eu_uname_${x.id}" value="${esc(x.username)}" placeholder="${t("username")}" style="flex:1;min-width:140px">
+                          <select id="eu_subj_${x.id}" style="flex:1;min-width:120px">
+                            ${subjects.map((s) => `<option value="${s}" ${normSubj(x.subject) === s ? "selected" : ""}>${t(s)}</option>`).join("")}
+                          </select>
+                          <select id="eu_cls_teach_${x.id}" style="width:110px">
+                            ${[6, 7, 8, 9, 10, 11, 12].map((c) => `<option value="${c}" ${(x.class || 8) == c ? "selected" : ""}>${t("cls")} ${c}</option>`).join("")}
+                          </select>
+                        </div>
+                        <button class="pri" onclick="admSave('${x.id}')">💾 ${t("save")}</button>
+                        <button onclick="admEdit(null)">❌ ${t("cancel")}</button>
+                      </td>
+                    </tr>`;
+                  }
+                  return `<tr>
+                    <td><b>${esc(x.name)}</b><br><small style="color:var(--sub)">${esc(x.username)}</small></td>
+                    <td><span class="pill-subject">${t(normSubj(x.subject))}</span></td>
+                    <td><span class="pill-class">${t("cls")} ${x.class || 8}</span></td>
+                    <td>${x.approved ? '<span class="badge-status">✔</span>' : '<span style="display:inline-flex;align-items:center;padding:2px 8px;background:#fef3c7;color:#b45309;border-radius:6px;font-size:12px;font-weight:bold">⏳ Pending</span>'}</td>
+                    <td style="white-space:nowrap">
+                      ${x.approved ? "" : `<button class="btn-approve" onclick="adm('approve','${x.id}')">${t("approve")}</button> `}
+                      <button class="btn-action" onclick="admEdit('${x.id}')">✏️ ${t("edit")}</button>
+                      <button class="btn-action" onclick="adm('reset','${x.id}')">🔑 ${t("reset")}</button>
+                      <button class="btn-delete" onclick="admDelete('${x.id}','${esc(x.name).replace(/'/g, "\\'")}')">🗑️ ${t("delete")}</button>
+                    </td>
+                  </tr>`;
+                })
+                .join("")}
+            </table>` : `<p class="sub">${t("noTeachers")}</p>`}
+
+            <h3>🎒 ${t("studentsDir")} (${students.length})</h3>
+            ${students.length ? `<table>
+              <tr><th>${t("name")}</th><th>${t("cls")}</th><th>${t("status")}</th><th>${t("actions")}</th></tr>
+              ${students
+                .map((x) => {
+                  if (S.editU === x.id) {
+                    return `<tr style="background:var(--card,#f4f6fa)">
+                      <td colspan="4" style="padding:10px">
+                        <div style="font-weight:bold;margin-bottom:6px">✏️ ${t("edit")}: ${esc(x.name)}</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+                          <input id="eu_name_${x.id}" value="${esc(x.name)}" placeholder="${t("name")}" style="flex:1;min-width:140px">
+                          <input id="eu_uname_${x.id}" value="${esc(x.username)}" placeholder="${t("username")}" style="flex:1;min-width:140px">
+                          <input id="eu_cls_${x.id}" type="number" min="6" max="12" value="${x.class || 8}" placeholder="${t("cls")}" style="width:90px">
+                        </div>
+                        <button class="pri" onclick="admSave('${x.id}')">💾 ${t("save")}</button>
+                        <button onclick="admEdit(null)">❌ ${t("cancel")}</button>
+                      </td>
+                    </tr>`;
+                  }
+                  return `<tr>
+                    <td><b>${esc(x.name)}</b><br><small style="color:var(--sub)">${esc(x.username)}</small></td>
+                    <td>${t("cls")} ${x.class || 8}</td>
+                    <td>${x.approved ? '<span class="badge-status">✔</span>' : '<span style="display:inline-flex;align-items:center;padding:2px 8px;background:#fef3c7;color:#b45309;border-radius:6px;font-size:12px;font-weight:bold">⏳ Pending</span>'}</td>
+                    <td style="white-space:nowrap">
+                      ${x.approved ? "" : `<button class="btn-approve" onclick="adm('approve','${x.id}')">${t("approve")}</button> `}
+                      <button class="btn-action" onclick="admEdit('${x.id}')">✏️ ${t("edit")}</button>
+                      <button class="btn-action" onclick="adm('reset','${x.id}')">🔑 ${t("reset")}</button>
+                      <button class="btn-delete" onclick="admDelete('${x.id}','${esc(x.name).replace(/'/g, "\\'")}')">🗑️ ${t("delete")}</button>
+                    </td>
+                  </tr>`;
+                })
+                .join("")}
+            </table>` : `<p class="sub">${t("noStu")}</p>`}
+
+            ${admins.length ? `<h3>🛡️ ${t("admin")}</h3><table>${admins.map((x) => `<tr><td><b>${esc(x.name)}</b><br><small style="color:var(--sub)">${esc(x.username)}</small></td><td>${t("admin")}</td><td>✅</td><td><button onclick="adm('reset','${x.id}')">🔑 ${t("reset")}</button></td></tr>`).join("")}</table>` : ""}
+          `;
+        }
+
+        document.getElementById("app").innerHTML = `
+          ${hdr()}
+          <div class="wrap" style="flex:1">
+            <div class="banner"><h2>🛠️ ${t("admin")}</h2></div>
+            <div class="row" style="margin:16px 0">
+              <div class="stat" style="cursor:pointer" onclick="S.admTab='users';render()"><b>${students.length}</b>${t("student")}</div>
+              <div class="stat" style="cursor:pointer" onclick="S.admTab='users';render()"><b>${teachers.length}</b>${t("teacher")}</div>
+              <div class="stat" style="cursor:pointer" onclick="S.admTab='schools';render()"><b>${(S.schools || []).length}</b>Schools</div>
+              <div class="stat" style="cursor:pointer" onclick="S.admTab='curricula';render()"><b>${(S.curricula || []).length}</b>Curricula</div>
+              <div class="stat" style="cursor:pointer" onclick="S.admTab='lessons';render()"><b>${allLessons.length}</b>${t("lessons")}</div>
+              <div class="stat" style="cursor:pointer" onclick="S.admTab='quizzes';render()"><b>${allQuizzes.length}</b>${t("quizzes")}</div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin:20px 0 16px;flex-wrap:wrap">
+              <button style="border-radius:24px;padding:9px 20px;font-weight:700;font-size:0.95rem;transition:all 0.2s;${curTab === 'users' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='users';render()">👥 ${t("users")}</button>
+              <button style="border-radius:24px;padding:9px 20px;font-weight:700;font-size:0.95rem;transition:all 0.2s;${curTab === 'schools' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='schools';render()">🏫 Schools</button>
+              <button style="border-radius:24px;padding:9px 20px;font-weight:700;font-size:0.95rem;transition:all 0.2s;${curTab === 'curricula' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='curricula';render()">📜 Curricula</button>
+              <button style="border-radius:24px;padding:9px 20px;font-weight:700;font-size:0.95rem;transition:all 0.2s;${curTab === 'lessons' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='lessons';render()">📚 ${t("lessons")}</button>
+              <button style="border-radius:24px;padding:9px 20px;font-weight:700;font-size:0.95rem;transition:all 0.2s;${curTab === 'quizzes' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='quizzes';render()">📝 ${t("quizzes")}</button>
+              <button style="border-radius:24px;padding:9px 20px;font-weight:700;font-size:0.95rem;transition:all 0.2s;${curTab === 'ann' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='ann';render()">📢 ${t("ann")}</button>
+            </div>
+
+            ${contentHtml}
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      boot();
+    </script>
+  </body>
+</html>
+

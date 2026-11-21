@@ -1,76 +1,2184 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Nabha Digital Learning</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap" rel=stylesheet>
-<style>
-:root{--bg:#f2f7f5;--c:#fff;--t:#12302a;--p:#13a085;--p2:#0b6e5b;--b:#dce9e4;--sh:0 8px 28px #0b3d3318}
-body.dark{--bg:#0b1613;--c:#14251f;--t:#e8f3ef;--b:#27413a;--sh:0 8px 28px #0006}
-*{box-sizing:border-box}body{margin:0;font:17px/1.5 'Noto Sans Gurmukhi','Noto Sans Devanagari',system-ui,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;flex-direction:column}
-header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 18px;background:linear-gradient(90deg,var(--p2),var(--p));color:#fff;box-shadow:var(--sh);z-index:5}
-header.land{position:absolute;left:0;right:0;background:none;box-shadow:none}.logo{font-size:1.05rem}.sp{flex:1}
-button{font:inherit;padding:10px 16px;border-radius:12px;border:1px solid var(--b);background:var(--c);color:var(--t);cursor:pointer;min-height:44px;transition:.2s}button:hover{transform:translateY(-2px)}
-header button{background:#ffffff26;color:#fff;border-color:#ffffff40;padding:6px 12px;min-height:36px;backdrop-filter:blur(6px)}.lg.on{background:#fff!important;color:var(--p2)!important;font-weight:700}
-.pri{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:0;margin:8px 8px 8px 0;box-shadow:0 6px 16px #13a08560}
-.dot{font-size:.8rem;padding:4px 10px;border-radius:20px;background:#ffffff26}.dot.off{color:#ffd27a}
-main{flex:1;max-width:860px;width:100%;margin:0 auto;padding:20px 16px}footer{text-align:center;padding:16px;background:var(--c);border-top:1px solid var(--b);font-size:.9rem}
-.hero{position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center;padding:90px 20px 50px;background:linear-gradient(135deg,#072e27,#0f7a63 50%,#2a55c0);color:#fff}
-.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.45;animation:fl 9s ease-in-out infinite alternate}.b1{width:340px;height:340px;background:#ffb703;top:-80px;right:-60px}.b2{width:300px;height:300px;background:#2de0b5;bottom:-90px;left:-70px;animation-delay:-4s}
-@keyframes fl{to{transform:translate(30px,40px) scale(1.15)}}@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-.hero-in{position:relative;max-width:1080px;margin:auto;display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center;width:100%}
-.hl{animation:up .8s both}.hero h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.2;margin:14px 0}.sub{font-size:1.1rem;opacity:.92;max-width:520px}
-.pill,.chips span{display:inline-block;padding:7px 15px;border-radius:30px;background:#ffffff26;border:1px solid #ffffff40;font-size:.92rem}.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.glass{background:var(--c);color:var(--t);border-radius:26px;padding:24px;box-shadow:0 30px 70px #0006;animation:up .8s .15s both}.glass h2{margin:16px 0 4px}
-.feats{max-width:1080px;margin:0 auto;padding:50px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.fc{background:var(--c);border:1px solid var(--b);border-radius:20px;padding:22px;box-shadow:var(--sh);transition:.25s}.fc:hover{transform:translateY(-6px)}.fc h3{margin:8px 0 4px}.fc p{margin:0;opacity:.8}
-.fc i{font-style:normal;font-size:2rem;display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#d9f5ec,#fff0c2)}
-.banner{background:linear-gradient(120deg,var(--p2),var(--p) 55%,#3b6fe0);color:#fff;border-radius:22px;padding:20px 24px;margin-bottom:12px;box-shadow:var(--sh)}.banner h2{margin:0}
-.card,.item,.stat{background:var(--c);border:1px solid var(--b);border-radius:18px;padding:16px;margin:10px 0;box-shadow:var(--sh)}
-.item{display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s}.item:hover{transform:translateX(5px);border-color:var(--p)}
-.ic{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#d9f5ec,#ffeeba);font-size:1.3rem;flex:none}.gr{flex:1}.ck{font-size:1.3rem}
-.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}.stat{flex:1;min-width:110px;text-align:center}.stat b{display:block;font-size:1.8rem;background:linear-gradient(135deg,var(--p),#3b6fe0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.tabs{display:flex;gap:6px;background:var(--bg);padding:6px;border-radius:16px}.tabs button{flex:1;border:0;background:none;font-size:.95rem;padding:8px 4px}.tabs .on{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;box-shadow:0 6px 14px #13a08550}
-input,select{width:100%;padding:12px 14px;margin:6px 0;border-radius:12px;border:1px solid var(--b);background:var(--bg);color:var(--t);font:inherit}input:focus{outline:2px solid var(--p)}
-.ring{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--p) calc(var(--v)*1%),var(--b) 0);display:grid;place-items:center}.ring span{background:var(--c);width:90px;height:90px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:1.4rem}
-.hint{background:#fff3cd;color:#5c4400;padding:12px 16px;border-radius:14px;margin:10px 0}.err{color:#d64545}table{width:100%;border-collapse:collapse}td{padding:10px 8px;border-bottom:1px solid var(--b)}
-.bar{background:var(--b);height:10px;border-radius:6px;min-width:70px}.bar i{display:block;height:10px;background:linear-gradient(90deg,var(--p),#3b6fe0);border-radius:6px}
-.opt{display:block;padding:11px;margin:6px 0;border:1px solid var(--b);border-radius:12px}.opt input{width:auto}.good{background:#c8f0d8;color:#123}.bad{background:#f8c9c4;color:#321}
-a{color:var(--p);cursor:pointer;text-decoration:underline}.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--p2);color:#fff;padding:10px 20px;border-radius:24px;box-shadow:var(--sh)}
-@media(max-width:820px){.hero-in{grid-template-columns:1fr;gap:28px}.hero{padding-top:110px}}
-</style></head><body><div id=app></div><script>
-// Developed by Piyush and Team
-const D={en:{app:'Digital Learning Platform – Nabha',login:'Login',register:'Register',student:'Student',teacher:'Teacher',admin:'Admin',username:'Username',password:'Password',name:'Full name',cls:'Class',logout:'Logout',overall:'Overall progress',lessons:'Lessons',quizzes:'Quizzes',start:'Start your first lesson!',done:'Completed',markDone:'Mark as complete',takeQuiz:'Take quiz',score:'Score',offline:'Offline',online:'Online',sync:'Sync now',synced:'Synced!',students:'Students',pending:'Pending approval',approve:'Approve',reset:'Reset password',users:'Users',ann:'Announcements',post:'Post',add:'Add lesson',title:'Title',subject:'Subject',demo:'Demo accounts',badges:'Badges',back:'Back',submit:'Submit',wrong:'Wrong username, password or role',taken:'Username already taken',wait:'Registered! Wait for admin approval.',noStu:'No students yet.',note:'Notes',noAnn:'No announcements',Maths:'Maths',Science:'Science',English:'English',Punjabi:'Punjabi',pw:'New password',newacc:'Create new account',haveacc:'Back to login',avg:'Average progress',load:'Loading…',msg:'Write a message'},
-hi:{app:'डिजिटल लर्निंग प्लेटफ़ॉर्म – नाभा',login:'लॉगिन',register:'रजिस्टर',student:'विद्यार्थी',teacher:'शिक्षक',admin:'एडमिन',username:'उपयोगकर्ता नाम',password:'पासवर्ड',name:'पूरा नाम',cls:'कक्षा',logout:'लॉगआउट',overall:'कुल प्रगति',lessons:'पाठ',quizzes:'क्विज़',start:'अपना पहला पाठ शुरू करें!',done:'पूरा हुआ',markDone:'पूरा करें',takeQuiz:'क्विज़ दें',score:'अंक',offline:'ऑफ़लाइन',online:'ऑनलाइन',sync:'सिंक करें',synced:'सिंक हो गया!',students:'विद्यार्थी',pending:'मंज़ूरी बाकी',approve:'मंज़ूर करें',reset:'पासवर्ड रीसेट',users:'उपयोगकर्ता',ann:'सूचनाएँ',post:'भेजें',add:'पाठ जोड़ें',title:'शीर्षक',subject:'विषय',demo:'डेमो खाते',badges:'बैज',back:'वापस',submit:'जमा करें',wrong:'गलत उपयोगकर्ता नाम, पासवर्ड या भूमिका',taken:'यह नाम पहले से मौजूद है',wait:'रजिस्टर हो गया! एडमिन की मंज़ूरी का इंतज़ार करें।',noStu:'अभी कोई विद्यार्थी नहीं।',note:'नोट्स',noAnn:'कोई सूचना नहीं',Maths:'गणित',Science:'विज्ञान',English:'अंग्रेज़ी',Punjabi:'पंजाबी',pw:'नया पासवर्ड',newacc:'नया खाता बनाएँ',haveacc:'लॉगिन पर वापस',avg:'औसत प्रगति',load:'लोड हो रहा है…',msg:'संदेश लिखें'},
-pa:{app:'ਡਿਜੀਟਲ ਲਰਨਿੰਗ ਪਲੇਟਫਾਰਮ – ਨਾਭਾ',login:'ਲੌਗਇਨ',register:'ਰਜਿਸਟਰ',student:'ਵਿਦਿਆਰਥੀ',teacher:'ਅਧਿਆਪਕ',admin:'ਐਡਮਿਨ',username:'ਯੂਜ਼ਰ ਨਾਮ',password:'ਪਾਸਵਰਡ',name:'ਪੂਰਾ ਨਾਮ',cls:'ਜਮਾਤ',logout:'ਲੌਗਆਊਟ',overall:'ਕੁੱਲ ਤਰੱਕੀ',lessons:'ਪਾਠ',quizzes:'ਕੁਇਜ਼',start:'ਆਪਣਾ ਪਹਿਲਾ ਪਾਠ ਸ਼ੁਰੂ ਕਰੋ!',done:'ਪੂਰਾ ਹੋਇਆ',markDone:'ਪੂਰਾ ਕਰੋ',takeQuiz:'ਕੁਇਜ਼ ਦਿਓ',score:'ਅੰਕ',offline:'ਆਫ਼ਲਾਈਨ',online:'ਆਨਲਾਈਨ',sync:'ਸਿੰਕ ਕਰੋ',synced:'ਸਿੰਕ ਹੋ ਗਿਆ!',students:'ਵਿਦਿਆਰਥੀ',pending:'ਮਨਜ਼ੂਰੀ ਬਾਕੀ',approve:'ਮਨਜ਼ੂਰ ਕਰੋ',reset:'ਪਾਸਵਰਡ ਰੀਸੈੱਟ',users:'ਯੂਜ਼ਰ',ann:'ਸੂਚਨਾਵਾਂ',post:'ਭੇਜੋ',add:'ਪਾਠ ਜੋੜੋ',title:'ਸਿਰਲੇਖ',subject:'ਵਿਸ਼ਾ',demo:'ਡੈਮੋ ਖਾਤੇ',badges:'ਬੈਜ',back:'ਵਾਪਸ',submit:'ਜਮ੍ਹਾਂ ਕਰੋ',wrong:'ਗਲਤ ਯੂਜ਼ਰ ਨਾਮ, ਪਾਸਵਰਡ ਜਾਂ ਭੂਮਿਕਾ',taken:'ਇਹ ਨਾਮ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ',wait:'ਰਜਿਸਟਰ ਹੋ ਗਿਆ! ਐਡਮਿਨ ਦੀ ਮਨਜ਼ੂਰੀ ਦੀ ਉਡੀਕ ਕਰੋ।',noStu:'ਹਾਲੇ ਕੋਈ ਵਿਦਿਆਰਥੀ ਨਹੀਂ।',note:'ਨੋਟਸ',noAnn:'ਕੋਈ ਸੂਚਨਾ ਨਹੀਂ',Maths:'ਗਣਿਤ',Science:'ਵਿਗਿਆਨ',English:'ਅੰਗਰੇਜ਼ੀ',Punjabi:'ਪੰਜਾਬੀ',pw:'ਨਵਾਂ ਪਾਸਵਰਡ',newacc:'ਨਵਾਂ ਖਾਤਾ ਬਣਾਓ',haveacc:'ਲੌਗਇਨ ਤੇ ਵਾਪਸ',avg:'ਔਸਤ ਤਰੱਕੀ',load:'ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…',msg:'ਸੁਨੇਹਾ ਲਿਖੋ'}};
-const X={en:{tag:'Free learning for Nabha',hero:'Learn anywhere. Even without internet.',heroSub:'Free lessons, quizzes and progress tracking for the students of Nabha, in Punjabi, Hindi and English.',f1:'Works offline',f1d:'Download lessons and keep learning without internet.',f2:'3 languages',f2d:'Punjabi, Hindi and English, one tap away.',f3:'Track progress',f3d:'See your growth with rings, badges and scores.',f4:'For everyone',f4d:'Students, teachers and admins, each with their own dashboard.'},
-hi:{tag:'नाभा के लिए मुफ़्त शिक्षा',hero:'कहीं भी सीखें। इंटरनेट के बिना भी।',heroSub:'नाभा के विद्यार्थियों के लिए मुफ़्त पाठ, क्विज़ और प्रगति ट्रैकिंग, पंजाबी, हिंदी और अंग्रेज़ी में।',f1:'ऑफ़लाइन चलता है',f1d:'पाठ डाउनलोड करें और बिना इंटरनेट के पढ़ते रहें।',f2:'3 भाषाएँ',f2d:'पंजाबी, हिंदी और अंग्रेज़ी, बस एक टैप में।',f3:'प्रगति देखें',f3d:'रिंग, बैज और अंकों से अपनी तरक्की देखें।',f4:'सबके लिए',f4d:'विद्यार्थी, शिक्षक और एडमिन, सबका अपना डैशबोर्ड।'},
-pa:{tag:'ਨਾਭਾ ਲਈ ਮੁਫ਼ਤ ਸਿੱਖਿਆ',hero:'ਕਿਤੇ ਵੀ ਸਿੱਖੋ। ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ।',heroSub:'ਨਾਭਾ ਦੇ ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਮੁਫ਼ਤ ਪਾਠ, ਕੁਇਜ਼ ਅਤੇ ਤਰੱਕੀ ਟਰੈਕਿੰਗ, ਪੰਜਾਬੀ, ਹਿੰਦੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ।',f1:'ਆਫ਼ਲਾਈਨ ਚੱਲਦਾ ਹੈ',f1d:'ਪਾਠ ਡਾਊਨਲੋਡ ਕਰੋ ਅਤੇ ਬਿਨਾਂ ਇੰਟਰਨੈੱਟ ਪੜ੍ਹਦੇ ਰਹੋ।',f2:'3 ਭਾਸ਼ਾਵਾਂ',f2d:'ਪੰਜਾਬੀ, ਹਿੰਦੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ, ਸਿਰਫ਼ ਇੱਕ ਟੈਪ ਵਿੱਚ।',f3:'ਤਰੱਕੀ ਵੇਖੋ',f3d:'ਰਿੰਗ, ਬੈਜ ਅਤੇ ਅੰਕਾਂ ਨਾਲ ਆਪਣੀ ਤਰੱਕੀ ਵੇਖੋ।',f4:'ਸਭ ਲਈ',f4d:'ਵਿਦਿਆਰਥੀ, ਅਧਿਆਪਕ ਅਤੇ ਐਡਮਿਨ, ਹਰ ਕਿਸੇ ਦਾ ਆਪਣਾ ਡੈਸ਼ਬੋਰਡ।'}};for(const l in X)Object.assign(D[l],X[l]);
-let S={lang:localStorage.lang||'pa',role:'student',reg:false,user:JSON.parse(localStorage.user||'null'),token:localStorage.token||'',c:null,p:{l:[],q:{}},users:[],stu:[],ann:[],msg:'',cur:null,qa:{},res:null,cfg:{},toast:''};
-const g=i=>document.getElementById(i),t=k=>D[S.lang][k]||D.en[k]||k,L=o=>o?(o[S.lang]||o.en||''):'';
-const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-async function api(u,m,b){const r=await fetch(u,{method:m||'GET',headers:{'Content-Type':'application/json',Authorization:'Bearer '+S.token},body:b?JSON.stringify(b):undefined});const j=await r.json().catch(()=>({}));if(!r.ok)throw j;return j}
-const pct=()=>{const n=S.c.lessons.length+S.c.quizzes.length;return n?Math.round((S.p.l.length+Object.keys(S.p.q).length)/n*100):0};
-function hdr(){return `<header class="${S.user?'':'land'}"><b class=logo>🎓 ${t('app')}</b><span class=sp></span>${['en','hi','pa'].map(l=>`<button class="lg ${S.lang==l?'on':''}" onclick="setL('${l}')">${{en:'EN',hi:'हिं',pa:'ਪੰ'}[l]}</button>`).join('')}<span class="dot ${navigator.onLine?'ok':'off'}">● ${t(navigator.onLine?'online':'offline')}</span>${S.user?`<button onclick="doSync()">⟳ ${t('sync')}</button>`:''}<button onclick="document.body.classList.toggle('dark')">🌓</button>${S.user?`<button onclick="logout()">${t('logout')}</button>`:''}</header>`}
-function loginV(){const r=S.role;return `<div class=tabs>${['student','teacher','admin'].map(x=>`<button class="${r==x?'on':''}" onclick="S.role='${x}';S.msg='';if(S.role=='admin')S.reg=false;render()">${{student:'🎒',teacher:'👩‍🏫',admin:'🛠️'}[x]}<br>${t(x)}</button>`).join('')}</div><h2>${t(r)} – ${t(S.reg?'register':'login')}</h2>${S.reg?`<input id=nm placeholder="${t('name')}">`+(r=='student'?`<input id=cl type=number min=6 max=12 value=8 placeholder="${t('cls')}">`:''):''}<input id=un placeholder="${t('username')}" autocapitalize=off autocomplete=username><input id=pw type=password placeholder="${t('password')}" autocomplete=current-password><button class=pri onclick="doAuth()">${t(S.reg?'register':'login')} →</button>${r!='admin'?`<a onclick="S.reg=!S.reg;S.msg='';render()">${t(S.reg?'haveacc':'newacc')}</a>`:''}<p class=err>${S.msg?t(S.msg):''}</p>`}
-function landV(){return `<section class=hero><div class="blob b1"></div><div class="blob b2"></div><div class=hero-in><div class=hl><span class=pill>🌾 ${t('tag')}</span><h1>${t('hero')}</h1><p class=sub>${t('heroSub')}</p><div class=chips><span>📴 ${t('f1')}</span><span>🗣️ ${t('f2')}</span><span>📈 ${t('f3')}</span></div></div><div class=glass>${loginV()}</div></div></section><section class=feats>${[['📴','f1'],['🗣️','f2'],['📈','f3'],['👥','f4']].map(([i,k])=>`<div class=fc><i>${i}</i><h3>${t(k)}</h3><p>${t(k+'d')}</p></div>`).join('')}</section>`}
-async function doAuth(){const b={username:g('un').value.trim(),password:g('pw').value,role:S.role};try{if(S.reg){b.name=g('nm').value.trim();if(g('cl'))b.class=+g('cl').value}const r=await api(S.reg?'/api/register':'/api/login','POST',b);if(r.pending){S.reg=false;S.msg='wait';return render()}S.token=r.token;S.user=r.user;localStorage.token=r.token;localStorage.user=JSON.stringify(r.user);S.msg='';S.reg=false;boot()}catch(e){S.msg=e.error||'wrong';render()}}
-function logout(){S.user=null;S.token='';S.c=null;S.cur=null;localStorage.removeItem('token');localStorage.removeItem('user');render()}
-async function boot(){S.c=null;render();const r=S.user.role;try{if(r=='student'){await flush();S.c=await api('/api/content');S.p=await api('/api/progress');localStorage.c=JSON.stringify(S.c);localStorage['p'+S.user.id]=JSON.stringify(S.p)}else{S.c=await api('/api/content');if(r=='teacher')S.stu=await api('/api/teacher/students');else S.users=await api('/api/admin/users')}S.ann=await api('/api/announcements')}catch(e){if(e.error=='wrong')return logout();if(r=='student'){S.c=JSON.parse(localStorage.c||'null');S.p=JSON.parse(localStorage['p'+S.user.id]||'{"l":[],"q":{}}')}}render()}
-function annV(){return S.ann.length?S.ann.map(a=>`<div class=item>📢 ${esc(a.text)}<br><small>${esc(a.by)}</small></div>`).join(''):`<p>${t('noAnn')}</p>`}
-function studV(){const c=S.c;if(S.cur&&S.cur.k=='lesson')return lessonV();if(S.cur&&S.cur.k=='quiz')return quizV();const P=pct();
-return `<div class=banner><h2>👋 ${esc(S.user.name)}</h2><small>${t('cls')} ${S.user.class}</small></div><div class="row card"><div class=ring style="--v:${P}"><span>${P}%</span></div><div><b>${t('overall')}</b><p>${t('lessons')}: ${S.p.l.length}/${c.lessons.length}<br>${t('quizzes')}: ${Object.keys(S.p.q).length}/${c.quizzes.length}<br>🏅 ${t('badges')}: ${Math.floor(S.p.l.length/3)}</p></div></div>${P==0?`<div class=hint>${t('start')}</div>`:''}<h3>${t('lessons')}</h3>${c.lessons.map(l=>`<div class=item onclick="S.cur={k:'lesson',id:${l.id}};render()"><span class=ic>${{Maths:'➗',Science:'🔬',English:'🔤',Punjabi:'ਅ'}[l.s]||'📘'}</span><div class=gr><b>${esc(L(l.t))}</b><br><small>${t(l.s)} · ${t('cls')} ${l.c}</small></div><span class=ck>${S.p.l.includes(l.id)?'✅':'›'}</span></div>`).join('')}<h3>${t('ann')}</h3>${annV()}`}
-function lessonV(){const l=S.c.lessons.find(x=>x.id==S.cur.id),q=S.c.quizzes.find(x=>x.lesson==l.id),d=S.p.l.includes(l.id);return `<button onclick="S.cur=null;render()">← ${t('back')}</button><h2>${esc(L(l.t))}</h2><h4>${t('note')}</h4><p>${esc(L(l.n))}</p>${d?`<p>✅ ${t('done')}</p>`:`<button class=pri onclick="act('l',${l.id});render()">${t('markDone')}</button>`}${q?`<button class=pri onclick="S.cur={k:'quiz',id:${q.id}};S.qa={};S.res=null;render()">📝 ${t('takeQuiz')}${S.p.q[q.id]!=null?' ('+t('score')+': '+S.p.q[q.id]+'%)':''}</button>`:''}`}
-function quizV(){const q=S.c.quizzes.find(x=>x.id==S.cur.id);return `<button onclick="S.cur={k:'lesson',id:${q.lesson}};render()">← ${t('back')}</button><h2>📝 ${t('quizzes')}</h2>${q.q.map((x,i)=>`<div class=card><b>${i+1}. ${esc(L(x.q))}</b>${x.o.map((o,j)=>`<label class="opt ${S.res!=null?(j==x.a?'good':(S.qa[i]==j?'bad':'')):''}"><input type=radio name=q${i} ${S.res!=null?'disabled':''} onclick="S.qa[${i}]=${j}"> ${esc(typeof o=='string'?o:L(o))}</label>`).join('')}</div>`).join('')}${S.res!=null?`<h3>${t('score')}: ${S.res}%</h3>`:`<button class=pri onclick="subQ(${q.id})">${t('submit')}</button>`}`}
-function subQ(id){const q=S.c.quizzes.find(x=>x.id==id);S.res=Math.round(q.q.filter((x,i)=>S.qa[i]===x.a).length/q.q.length*100);act('q',id,S.res);render()}
-function act(ty,id,sc){if(ty=='l'){if(!S.p.l.includes(id))S.p.l.push(id)}else S.p.q[id]=sc;localStorage['p'+S.user.id]=JSON.stringify(S.p);const Q=JSON.parse(localStorage.q||'[]');Q.push({t:ty,id,score:sc,u:S.user.id});localStorage.q=JSON.stringify(Q);flush()}
-async function flush(){const Q=JSON.parse(localStorage.q||'[]').filter(o=>o.u==S.user.id);if(!Q.length||!navigator.onLine)return false;try{await api('/api/sync','POST',{ops:Q});localStorage.q=JSON.stringify(JSON.parse(localStorage.q).filter(o=>o.u!=S.user.id));return true}catch{return false}}
-async function doSync(){await flush();if(navigator.onLine)await boot();S.toast=t('synced');render();setTimeout(()=>{S.toast='';render()},1800)}
-function teachV(){const a=S.stu.length?Math.round(S.stu.reduce((s,x)=>s+x.p,0)/S.stu.length):0;return `<div class=banner><h2>👩‍🏫 ${esc(S.user.name)}</h2></div><div class=row><div class=stat><b>${S.stu.length}</b>${t('students')}</div><div class=stat><b>${S.c.lessons.length}</b>${t('lessons')}</div><div class=stat><b>${a}%</b>${t('avg')}</div></div><h3>${t('students')}</h3>${S.stu.length?`<table>${S.stu.map(x=>`<tr><td>${esc(x.name)}</td><td>${t('cls')} ${x.class}</td><td><div class=bar><i style="width:${x.p}%"></i></div></td><td>${x.p}%</td></tr>`).join('')}</table>`:`<p>${t('noStu')}</p>`}<h3>${t('add')}</h3><div class=card>${['en','hi','pa'].map(l=>`<input id=t_${l} placeholder="${t('title')} (${l.toUpperCase()})">`).join('')}<select id=sb>${['Maths','Science','English','Punjabi'].map(s=>`<option value=${s}>${t(s)}</option>`).join('')}</select><input id=lc type=number value=8 min=6 max=12><button class=pri onclick="addL()">${t('add')}</button></div><h3>${t('ann')}</h3><div class=card><input id=an placeholder="${t('msg')}"><button class=pri onclick="postA()">${t('post')}</button></div>${annV()}`}
-async function addL(){if(!g('t_en').value.trim())return;await api('/api/teacher/lesson','POST',{en:g('t_en').value,hi:g('t_hi').value,pa:g('t_pa').value,subject:g('sb').value,cls:g('lc').value});boot()}
-async function postA(){await api('/api/announce','POST',{text:g('an').value});boot()}
-function admV(){const u=S.users,n=r=>u.filter(x=>x.role==r).length;return `<div class=banner><h2>🛠️ ${t('admin')}</h2></div><div class=row><div class=stat><b>${n('student')}</b>${t('student')}</div><div class=stat><b>${n('teacher')}</b>${t('teacher')}</div><div class=stat><b>${u.filter(x=>!x.approved).length}</b>${t('pending')}</div><div class=stat><b>${S.c.lessons.length}</b>${t('lessons')}</div><div class=stat><b>${S.c.quizzes.length}</b>${t('quizzes')}</div></div><h3>${t('users')}</h3><table>${u.map(x=>`<tr><td>${esc(x.name)}<br><small>${esc(x.username)}</small></td><td>${t(x.role)}</td><td>${x.approved?'✅':'⏳'}</td><td>${x.approved?'':`<button onclick="adm('approve',${x.id})">${t('approve')}</button> `}<button onclick="adm('reset',${x.id})">${t('reset')}</button></td></tr>`).join('')}</table><h3>${t('ann')}</h3>${annV()}`}
-async function adm(a,id){const b={id};if(a=='reset'){b.password=prompt(t('pw'));if(!b.password)return}await api('/api/admin/'+a,'POST',b);boot()}
-function setL(l){S.lang=l;localStorage.lang=l;document.documentElement.lang=l;render()}
-function render(){const u=g('un')&&g('un').value,p=g('pw')&&g('pw').value;let b;if(!S.user)b=landV();else if(!S.c)b=`<main><p>${t('load')}</p></main>`;else b='<main>'+{student:studV,teacher:teachV,admin:admV}[S.user.role]()+'</main>';g('app').innerHTML=hdr()+b+'<footer>Developed by Piyush and Team</footer>'+(S.toast?`<div class=toast>${S.toast}</div>`:'');if(u&&g('un'))g('un').value=u;if(p&&g('pw'))g('pw').value=p}
-addEventListener('keydown',e=>{if(e.key=='Enter'&&!S.user&&g('un'))doAuth()});
-addEventListener('online',()=>{if(S.user&&S.user.role=='student')flush();render()});addEventListener('offline',render);
-if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js');
-fetch('/api/config').then(r=>r.json()).then(c=>{S.cfg=c;localStorage.cfg=JSON.stringify(c)}).catch(()=>{S.cfg=JSON.parse(localStorage.cfg||'{}')}).finally(()=>S.user?boot():render());
-</script></body></html>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f2f7f5;
+        --c: #fff;
+        --t: #12302a;
+        --p: #13a085;
+        --p2: #0b6e5b;
+        --b: #dce9e4;
+        --sh: 0 8px 28px #0b3d3318;
+      }
+      body.dark {
+        --bg: #0b1613;
+        --c: #14251f;
+        --t: #e8f3ef;
+        --b: #27413a;
+        --sh: 0 8px 28px #0006;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font:
+          17px/1.5 "Noto Sans Gurmukhi",
+          "Noto Sans Devanagari",
+          system-ui,
+          sans-serif;
+        background: var(--bg);
+        color: var(--t);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        padding: 12px 18px;
+        background: linear-gradient(90deg, var(--p2), var(--p));
+        color: #fff;
+        box-shadow: var(--sh);
+        z-index: 5;
+      }
+      header.land {
+        position: absolute;
+        left: 0;
+        right: 0;
+        background: none;
+        box-shadow: none;
+      }
+      .logo {
+        font-size: 1.05rem;
+      }
+      .sp {
+        flex: 1;
+      }
+      button {
+        font: inherit;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--b);
+        background: var(--c);
+        color: var(--t);
+        cursor: pointer;
+        min-height: 44px;
+        transition: 0.2s;
+      }
+      button:hover {
+        transform: translateY(-2px);
+      }
+      header button {
+        background: #ffffff26;
+        color: #fff;
+        border-color: #ffffff40;
+        padding: 6px 12px;
+        min-height: 36px;
+        backdrop-filter: blur(6px);
+      }
+      .lg.on {
+        background: #fff !important;
+        color: var(--p2) !important;
+        font-weight: 700;
+      }
+      .pri {
+        background: linear-gradient(135deg, var(--p), var(--p2));
+        color: #fff;
+        border: 0;
+        margin: 8px 8px 8px 0;
+        box-shadow: 0 6px 16px #13a08560;
+      }
+      .dot {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: #ffffff26;
+      }
+      .dot.off {
+        color: #ffd27a;
+      }
+      main {
+        flex: 1;
+        max-width: 860px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 16px;
+      }
+      footer {
+        text-align: center;
+        padding: 16px;
+        background: var(--c);
+        border-top: 1px solid var(--b);
+        font-size: 0.9rem;
+      }
+      .hero {
+        position: relative;
+        overflow: hidden;
+        min-height: 92vh;
+        display: flex;
+        align-items: center;
+        padding: 90px 20px 50px;
+        background: linear-gradient(135deg, #072e27, #0f7a63 50%, #2a55c0);
+        color: #fff;
+      }
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.45;
+        animation: fl 9s ease-in-out infinite alternate;
+      }
+      .b1 {
+        width: 340px;
+        height: 340px;
+        background: #ffb703;
+        top: -80px;
+        right: -60px;
+      }
+      .b2 {
+        width: 300px;
+        height: 300px;
+        background: #2de0b5;
+        bottom: -90px;
+        left: -70px;
+        animation-delay: -4s;
+      }
+      @keyframes fl {
+        to {
+          transform: translate(30px, 40px) scale(1.15);
+        }
+      }
+      @keyframes up {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .hero-in {
+        position: relative;
+        max-width: 1080px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 40px;
+        align-items: center;
+        width: 100%;
+      }
+      .hl {
+        animation: up 0.8s both;
+      }
+      .hero h1 {
+        font-size: clamp(2rem, 5vw, 3.3rem);
+        line-height: 1.2;
+        margin: 14px 0;
+      }
+      .sub {
+        font-size: 1.1rem;
+        opacity: 0.92;
+        max-width: 520px;
+      }
+      .pill,
+      .chips span {
+        display: inline-block;
+        padding: 7px 15px;
+        border-radius: 30px;
+        background: #ffffff26;
+        border: 1px solid #ffffff40;
+        font-size: 0.92rem;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .glass {
+        background: var(--c);
+        color: var(--t);
+        border-radius: 26px;
+        padding: 24px;
+        box-shadow: 0 30px 70px #0006;
+        animation: up 0.8s 0.15s both;
+      }
+      .glass h2 {
+        margin: 16px 0 4px;
+      }
+      .feats {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 50px 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+      }
+      .fc {
+        background: var(--c);
+        border: 1px solid var(--b);
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: var(--sh);
+        transition: 0.25s;
+      }
+      .fc:hover {
+        transform: translateY(-6px);
+      }
+      .fc h3 {
+        margin: 8px 0 4px;
+      }
+      .fc p {
+        margin: 0;
+        opacity: 0.8;
+      }
+      .fc i {
+        font-style: normal;
+        font-size: 2rem;
+        display: grid;
+        place-items: center;
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #d9f5ec, #fff0c2);
+      }
+      .banner {
+        background: linear-gradient(120deg, var(--p2), var(--p) 55%, #3b6fe0);
+        color: #fff;
+        border-radius: 22px;
+        padding: 20px 24px;
+        margin-bottom: 12px;
+        box-shadow: var(--sh);
+      }
+      .banner h2 {
+        margin: 0;
+      }
+      .card,
+      .item,
+      .stat {
+        background: var(--c);
+        border: 1px solid var(--b);
+        border-radius: 18px;
+        padding: 16px;
+        margin: 10px 0;
+        box-shadow: var(--sh);
+      }
+      .item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .item:hover {
+        transform: translateX(5px);
+        border-color: var(--p);
+      }
+      .ic {
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #d9f5ec, #ffeeba);
+        font-size: 1.3rem;
+        flex: none;
+      }
+      .gr {
+        flex: 1;
+      }
+      .ck {
+        font-size: 1.3rem;
+      }
+      .row {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .stat {
+        flex: 1;
+        min-width: 110px;
+        text-align: center;
+      }
+      .stat b {
+        display: block;
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, var(--p), #3b6fe0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        background: var(--bg);
+        padding: 6px;
+        border-radius: 16px;
+      }
+      .tabs button {
+        flex: 1;
+        border: 0;
+        background: none;
+        font-size: 0.95rem;
+        padding: 8px 4px;
+      }
+      .tabs .on {
+        background: linear-gradient(135deg, var(--p), var(--p2));
+        color: #fff;
+        box-shadow: 0 6px 14px #13a08550;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 12px 14px;
+        margin: 6px 0;
+        border-radius: 12px;
+        border: 1px solid var(--b);
+        background: var(--bg);
+        color: var(--t);
+        font: inherit;
+      }
+      input:focus {
+        outline: 2px solid var(--p);
+      }
+      .ring {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: conic-gradient(var(--p) calc(var(--v) * 1%), var(--b) 0);
+        display: grid;
+        place-items: center;
+      }
+      .ring span {
+        background: var(--c);
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 1.4rem;
+      }
+      .hint {
+        background: #fff3cd;
+        color: #5c4400;
+        padding: 12px 16px;
+        border-radius: 14px;
+        margin: 10px 0;
+      }
+      .err {
+        color: #d64545;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--b);
+      }
+      .bar {
+        background: var(--b);
+        height: 10px;
+        border-radius: 6px;
+        min-width: 70px;
+      }
+      .bar i {
+        display: block;
+        height: 10px;
+        background: linear-gradient(90deg, var(--p), #3b6fe0);
+        border-radius: 6px;
+      }
+      .opt {
+        display: block;
+        padding: 11px;
+        margin: 6px 0;
+        border: 1px solid var(--b);
+        border-radius: 12px;
+      }
+      .opt input {
+        width: auto;
+      }
+      .good {
+        background: #c8f0d8;
+        color: #123;
+      }
+      .bad {
+        background: #f8c9c4;
+        color: #321;
+      }
+      a {
+        color: var(--p);
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .toast {
+        position: fixed;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--p2);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 24px;
+        box-shadow: var(--sh);
+      }
+      @media (max-width: 820px) {
+        .hero-in {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .hero {
+          padding-top: 110px;
+        }
+      }
+    
+/* ===== Nabha Modern Theme Enhancements (Matching Screenshot 1 & 2) ===== */
+:root {
+  --bg: #f8fafc;
+  --c: #ffffff;
+  --t: #0f172a;
+  --sub: #64748b;
+  --p: #0d9488;
+  --p2: #0b6e5b;
+  --b: #e2e8f0;
+  --sh: 0 4px 18px rgba(0, 0, 0, 0.04);
+  --sh-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  background: var(--bg);
+  color: var(--t);
+  font-family: "Noto Sans Gurmukhi", "Noto Sans Devanagari", system-ui, -apple-system, sans-serif;
+}
+
+.banner {
+  background: linear-gradient(135deg, #0d9488 0%, #059669 45%, #2563eb 100%) !important;
+  color: #fff !important;
+  border-radius: 18px !important;
+  padding: 22px 28px !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 8px 24px rgba(13, 148, 136, 0.2) !important;
+}
+
+.banner h2 {
+  margin: 0 !important;
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.stat {
+  background: #ffffff !important;
+  border: 1px solid #edf2f7 !important;
+  border-radius: 14px !important;
+  padding: 18px 16px !important;
+  margin: 8px 0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  flex: 1 !important;
+  min-width: 120px !important;
+  text-align: center !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+.stat:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07) !important;
+}
+
+.stat b {
+  display: block !important;
+  font-size: 2.1rem !important;
+  font-weight: 700 !important;
+  color: #0284c7 !important;
+  line-height: 1.2 !important;
+  margin-bottom: 4px !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+
+.stat span, .stat small {
+  display: block !important;
+  color: #475569 !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+}
+
+table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: #ffffff !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #edf2f7 !important;
+  margin: 16px 0 !important;
+}
+
+th {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  font-size: 0.92rem !important;
+  padding: 14px 18px !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  text-align: left !important;
+}
+
+td {
+  padding: 14px 18px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #334155 !important;
+  vertical-align: middle !important;
+  font-size: 0.95rem !important;
+}
+
+tr:last-child td {
+  border-bottom: none !important;
+}
+
+tr:hover td {
+  background: #fcfdfe !important;
+}
+
+.btn-action {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  min-height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.btn-action:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+  transform: translateY(-1px) !important;
+}
+
+.btn-delete {
+  background: #ffffff !important;
+  border: 1px solid #fecaca !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #dc2626 !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  min-height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.btn-delete:hover {
+  background: #fee2e2 !important;
+  border-color: #fca5a5 !important;
+  color: #b91c1c !important;
+  transform: translateY(-1px) !important;
+}
+
+.btn-approve {
+  background: #10b981 !important;
+  border: 1px solid #059669 !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  min-height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.btn-approve:hover {
+  background: #059669 !important;
+  transform: translateY(-1px) !important;
+}
+
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: #dcfce7;
+  color: #15803d;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.pill-subject {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pill-class {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+    
+/* ===== Features Grid, Hero & Portal Card Styles (Fix for User Screenshot) ===== */
+.wrap {
+  max-width: 1120px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 24px 20px 48px !important;
+  box-sizing: border-box !important;
+}
+
+.hero {
+  border-radius: 20px !important;
+  padding: 40px 32px !important;
+  background: linear-gradient(135deg, #0b6e5b 0%, #0d9488 45%, #2563eb 100%) !important;
+  color: #fff !important;
+  margin: 16px 0 28px !important;
+  box-shadow: 0 10px 30px rgba(13, 148, 136, 0.2) !important;
+  min-height: auto !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: block !important;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  margin: 12px 0 16px !important;
+}
+
+.hero p {
+  font-size: 1.1rem !important;
+  opacity: 0.95 !important;
+  max-width: 720px !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+.tag, .hero .tag {
+  display: inline-block !important;
+  padding: 6px 16px !important;
+  border-radius: 30px !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  margin-bottom: 12px !important;
+}
+
+/* 4 Feature Cards (Fix for works offline, 3 languages, track progress, for everyone) */
+.grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+  gap: 20px !important;
+  margin: 28px 0 36px !important;
+}
+
+.feat {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 24px 20px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+.feat:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+  border-color: #cbd5e1 !important;
+}
+
+.feat h3 {
+  margin: 0 0 10px 0 !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.feat p {
+  margin: 0 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  color: #64748b !important;
+}
+
+/* Portal Selection Cards */
+.portal-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 24px !important;
+  margin: 24px 0 40px !important;
+}
+
+.portal-card {
+  background: #ffffff !important;
+  border-radius: 18px !important;
+  padding: 26px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #e2e8f0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+
+.portal-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+.portal-card h3 {
+  margin-top: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.portal-card p {
+  color: #64748b !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  margin: 8px 0 18px !important;
+  flex: 1 !important;
+}
+
+.portal-btn {
+  display: inline-block !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  padding: 12px 18px !important;
+  border-radius: 12px !important;
+  font-size: 0.95rem !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+.portal-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+}
+
+.auth-container {
+  max-width: 460px !important;
+  margin: 40px auto !important;
+  padding: 32px 28px !important;
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #e2e8f0 !important;
+  box-sizing: border-box !important;
+}
+
+.auth-container input, .auth-container select {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  font-size: 0.95rem !important;
+}
+
+.auth-container input:focus, .auth-container select:focus {
+  border-color: #0d9488 !important;
+  outline: none !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15) !important;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // Developed by Piyush and Team
+      const D = {
+        en: {
+          app: "Digital Learning Platform – Nabha",
+          login: "Login",
+          register: "Register",
+          student: "Student",
+          teacher: "Teacher",
+          admin: "Admin",
+          username: "Username",
+          password: "Password",
+          name: "Full name",
+          cls: "Class",
+          logout: "Logout",
+          overall: "Overall progress",
+          lessons: "Lessons",
+          quizzes: "Quizzes",
+          start: "Start your first lesson!",
+          done: "Completed",
+          markDone: "Mark as complete",
+          takeQuiz: "Take quiz",
+          score: "Score",
+          offline: "Offline",
+          online: "Online",
+          sync: "Sync now",
+          synced: "Synced!",
+          students: "Students",
+          pending: "Pending approval",
+          approve: "Approve",
+          reset: "Reset password",
+          users: "Users",
+          ann: "Announcements",
+          post: "Post",
+          add: "Add lesson",
+          title: "Title",
+          subject: "Subject",
+          demo: "Demo accounts",
+          badges: "Badges",
+          back: "Back",
+          submit: "Submit",
+          wrong: "Wrong username, password or role",
+          taken: "Username already taken",
+          wait: "Registered! Wait for admin approval.",
+          noStu: "No students yet.",
+          note: "Notes",
+          noAnn: "No announcements",
+          Maths: "Maths",
+          Science: "Science",
+          English: "English",
+          Punjabi: "Punjabi",
+          pw: "New password",
+          newacc: "Create new account",
+          haveacc: "Back to login",
+          avg: "Average progress",
+          load: "Loading…",
+          msg: "Write a message",
+          myLessons: "My lessons",
+          allClasses: "All classes",
+          allLessons: "All lessons",
+          noMyLessons: "No lessons created by you yet.",
+          noLessons: "No lessons available.",
+          edit: "Edit",
+          editLesson: "Edit lesson",
+          save: "Save",
+          teachersBySubject: "Teachers by Subject",
+          readOnly: "Read only",
+          you: "You",
+          systemLesson: "School",
+          createQuiz: "Create quiz",
+          editQuiz: "Edit quiz",
+          question: "Question",
+          options: "Options",
+          addQuestion: "Add question",
+          removeQuestion: "Remove question",
+          saveQuiz: "Save quiz",
+          fillQuizPrompt: "Please add at least 1 question with English text and at least 2 options.",
+          delete: "Delete",
+          confirmDelete: "Are you sure you want to delete this user?",
+          selfDelete: "Cannot delete your own admin account.",
+          teachersDir: "Teachers",
+          studentsDir: "Students",
+          cancel: "Cancel",
+          status: "Status",
+          actions: "Actions",
+          noTeachers: "No teachers registered yet.",
+          assignedClass: "Assigned Class",
+          assignedForYou: "Your assigned subject & class",
+          lessonContent: "Lesson Content",
+          lessonContentPlaceholder: "Enter lesson text, explanation or study notes...",
+          noContent: "No content available yet for this lesson.",
+          optional: "Optional",
+          editProfile: "Edit Profile",
+          profileHint: "You can update your name, username and password.",
+          newPasswordOptional: "New password (leave blank to keep current)",
+          adminOnlyNotice: "Class and Subject can only be changed by the School Administrator.",
+          profileSaved: "Profile updated successfully!",
+          fillRequiredFields: "Please enter your full name and username.",
+          allSubjects: "All subjects",
+          resetFilters: "Reset filters",
+          viewContent: "View content",
+          viewQuestions: "View questions",
+          close: "Close",
+          lesson: "Lesson",
+          noQuizzes: "No quizzes found for this class and subject.",
+          filter: "Filter",
+        },
+        hi: {
+          app: "डिजिटल लर्निंग प्लेटफ़ॉर्म – नाभा",
+          login: "लॉगिन",
+          register: "रजिस्टर",
+          student: "विद्यार्थी",
+          teacher: "शिक्षक",
+          admin: "एडमिन",
+          username: "उपयोगकर्ता नाम",
+          password: "पासवर्ड",
+          name: "पूरा नाम",
+          cls: "कक्षा",
+          logout: "लॉगआउट",
+          overall: "कुल प्रगति",
+          lessons: "पाठ",
+          quizzes: "क्विज़",
+          start: "अपना पहला पाठ शुरू करें!",
+          done: "पूरा हुआ",
+          markDone: "पूरा करें",
+          takeQuiz: "क्विज़ दें",
+          score: "अंक",
+          offline: "ऑफ़लाइन",
+          online: "ऑनलाइन",
+          sync: "सिंक करें",
+          synced: "सिंक हो गया!",
+          students: "विद्यार्थी",
+          pending: "मंज़ूरी बाकी",
+          approve: "मंज़ूर करें",
+          reset: "पासवर्ड रीसेट",
+          users: "उपयोगकर्ता",
+          ann: "सूचनाएँ",
+          post: "भेजें",
+          add: "पाठ जोड़ें",
+          title: "शीर्षक",
+          subject: "विषय",
+          demo: "डेमो खाते",
+          badges: "बैज",
+          back: "वापस",
+          submit: "जमा करें",
+          wrong: "गलत उपयोगकर्ता नाम, पासवर्ड या भूमिका",
+          taken: "यह नाम पहले से मौजूद है",
+          wait: "रजिस्टर हो गया! एडमिन की मंज़ूरी का इंतज़ार करें।",
+          noStu: "अभी कोई विद्यार्थी नहीं।",
+          note: "नोट्स",
+          noAnn: "कोई सूचना नहीं",
+          Maths: "गणित",
+          Science: "विज्ञान",
+          English: "अंग्रेज़ी",
+          Punjabi: "पंजाबी",
+          pw: "नया पासवर्ड",
+          newacc: "नया खाता बनाएँ",
+          haveacc: "लॉगिन पर वापस",
+          avg: "औसत प्रगति",
+          load: "लोड हो रहा है…",
+          msg: "संदेश लिखें",
+          myLessons: "मेरे पाठ",
+          allClasses: "सभी कक्षाएँ",
+          allLessons: "सभी पाठ",
+          noMyLessons: "आपके द्वारा बनाया गया कोई पाठ नहीं है।",
+          noLessons: "कोई पाठ उपलब्ध नहीं है।",
+          edit: "संपादित करें",
+          editLesson: "पाठ संपादित करें",
+          save: "सहेजें",
+          teachersBySubject: "विषय अनुसार शिक्षक",
+          readOnly: "केवल पढ़ने के लिए",
+          you: "आप",
+          systemLesson: "स्कूल",
+          createQuiz: "क्विज़ बनाएँ",
+          editQuiz: "क्विज़ संपादित करें",
+          question: "प्रश्न",
+          options: "विकल्प",
+          addQuestion: "प्रश्न जोड़ें",
+          removeQuestion: "प्रश्न हटाएँ",
+          saveQuiz: "क्विज़ सहेजें",
+          fillQuizPrompt: "कृपया कम से कम 1 प्रश्न और 2 विकल्प भरें।",
+          delete: "हटाएँ",
+          confirmDelete: "क्या आप वाकई इस उपयोगकर्ता को हटाना चाहते हैं?",
+          selfDelete: "आप अपना स्वयं का एडमिन खाता नहीं हटा सकते।",
+          teachersDir: "शिक्षक",
+          studentsDir: "विद्यार्थी",
+          cancel: "रद्द करें",
+          status: "स्थिति",
+          actions: "कार्रवाई",
+          noTeachers: "कोई शिक्षक पंजीकृत नहीं है।",
+          assignedClass: "निर्धारित कक्षा",
+          assignedForYou: "आपका निर्धारित विषय और कक्षा",
+          lessonContent: "पाठ सामग्री",
+          lessonContentPlaceholder: "पाठ के नोट्स, व्याख्या या अध्ययन सामग्री यहाँ लिखें...",
+          noContent: "इस पाठ के लिए अभी कोई सामग्री उपलब्ध नहीं है।",
+          optional: "वैकल्पिक",
+          editProfile: "प्रोफ़ाइल संपादित करें",
+          profileHint: "आप अपना नाम, उपयोगकर्ता नाम और पासवर्ड बदल सकते हैं।",
+          newPasswordOptional: "नया पासवर्ड (मौजूदा पासवर्ड रखने के लिए खाली छोड़ें)",
+          adminOnlyNotice: "कक्षा और विषय में बदलाव केवल स्कूल एडमिन द्वारा ही किया जा सकता है।",
+          profileSaved: "प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई!",
+          fillRequiredFields: "कृपया अपना पूरा नाम और उपयोगकर्ता नाम दर्ज करें।",
+          allSubjects: "सभी विषय",
+          resetFilters: "फ़िल्टर रीसेट करें",
+          viewContent: "सामग्री देखें",
+          viewQuestions: "प्रश्न देखें",
+          close: "बंद करें",
+          lesson: "पाठ",
+          noQuizzes: "इस कक्षा और विषय के लिए कोई क्विज़ नहीं मिली।",
+          filter: "फ़िल्टर",
+        },
+        pa: {
+          app: "ਡਿਜੀਟਲ ਲਰਨਿੰਗ ਪਲੇਟਫਾਰਮ – ਨਾਭਾ",
+          login: "ਲੌਗਇਨ",
+          register: "ਰਜਿਸਟਰ",
+          student: "ਵਿਦਿਆਰਥੀ",
+          teacher: "ਅਧਿਆਪਕ",
+          admin: "ਐਡਮਿਨ",
+          username: "ਯੂਜ਼ਰ ਨਾਮ",
+          password: "ਪਾਸਵਰਡ",
+          name: "ਪੂਰਾ ਨਾਮ",
+          cls: "ਜਮਾਤ",
+          logout: "ਲੌਗਆਊਟ",
+          overall: "ਕੁੱਲ ਤਰੱਕੀ",
+          lessons: "ਪਾਠ",
+          quizzes: "ਕੁਇਜ਼",
+          start: "ਆਪਣਾ ਪਹਿਲਾ ਪਾਠ ਸ਼ੁਰੂ ਕਰੋ!",
+          done: "ਪੂਰਾ ਹੋਇਆ",
+          markDone: "ਪੂਰਾ ਕਰੋ",
+          takeQuiz: "ਕੁਇਜ਼ ਦਿਓ",
+          score: "ਅੰਕ",
+          offline: "ਆਫ਼ਲਾਈਨ",
+          online: "ਆਨਲਾਈਨ",
+          sync: "ਸਿੰਕ ਕਰੋ",
+          synced: "ਸਿੰਕ ਹੋ ਗਿਆ!",
+          students: "ਵਿਦਿਆਰਥੀ",
+          pending: "ਮਨਜ਼ੂਰੀ ਬਾਕੀ",
+          approve: "ਮਨਜ਼ੂਰ ਕਰੋ",
+          reset: "ਪਾਸਵਰਡ ਰੀਸੈੱਟ",
+          users: "ਯੂਜ਼ਰ",
+          ann: "ਸੂਚਨਾਵਾਂ",
+          post: "ਭੇਜੋ",
+          add: "ਪਾਠ ਜੋੜੋ",
+          title: "ਸਿਰਲੇਖ",
+          subject: "ਵਿਸ਼ਾ",
+          demo: "ਡੈਮੋ ਖਾਤੇ",
+          badges: "ਬੈਜ",
+          back: "ਵਾਪਸ",
+          submit: "ਜਮ੍ਹਾਂ ਕਰੋ",
+          wrong: "ਗਲਤ ਯੂਜ਼ਰ ਨਾਮ, ਪਾਸਵਰਡ ਜਾਂ ਭੂਮਿਕਾ",
+          taken: "ਇਹ ਨਾਮ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ",
+          wait: "ਰਜਿਸਟਰ ਹੋ ਗਿਆ! ਐਡਮਿਨ ਦੀ ਮਨਜ਼ੂਰੀ ਦੀ ਉਡੀਕ ਕਰੋ।",
+          noStu: "ਹਾਲੇ ਕੋਈ ਵਿਦਿਆਰਥੀ ਨਹੀਂ।",
+          note: "ਨੋਟਸ",
+          noAnn: "ਕੋਈ ਸੂਚਨਾ ਨਹੀਂ",
+          Maths: "ਗਣਿਤ",
+          Science: "ਵਿਗਿਆਨ",
+          English: "ਅੰਗਰੇਜ਼ੀ",
+          Punjabi: "ਪੰਜਾਬੀ",
+          pw: "ਨਵਾਂ ਪਾਸਵਰਡ",
+          newacc: "ਨਵਾਂ ਖਾਤਾ ਬਣਾਓ",
+          haveacc: "ਲੌਗਇਨ ਤੇ ਵਾਪਸ",
+          avg: "ਔਸਤ ਤਰੱਕੀ",
+          load: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
+          msg: "ਸੁਨੇਹਾ ਲਿਖੋ",
+          myLessons: "ਮੇਰੇ ਪਾਠ",
+          allClasses: "ਸਾਰੀਆਂ ਜਮਾਤਾਂ",
+          allLessons: "ਸਾਰੇ ਪਾਠ",
+          noMyLessons: "ਤੁਹਾਡੇ ਦੁਆਰਾ ਬਣਾਇਆ ਕੋਈ ਪਾਠ ਨਹੀਂ ਹੈ।",
+          noLessons: "ਕੋਈ ਪਾਠ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।",
+          edit: "ਸੋਧੋ",
+          editLesson: "ਪਾਠ ਸੋਧੋ",
+          save: "ਸੰਭਾਲੋ",
+          teachersBySubject: "ਵਿਸ਼ੇ ਅਨੁਸਾਰ ਅਧਿਆਪਕ",
+          readOnly: "ਸਿਰਫ਼ ਪੜ੍ਹਨ ਲਈ",
+          you: "ਤੁਸੀਂ",
+          systemLesson: "ਸਕੂਲ",
+          createQuiz: "ਕੁਇਜ਼ ਬਣਾਓ",
+          editQuiz: "ਕੁਇਜ਼ ਸੋਧੋ",
+          question: "ਸਵਾਲ",
+          options: "ਵਿਕਲਪ",
+          addQuestion: "ਸਵਾਲ ਜੋੜੋ",
+          removeQuestion: "ਸਵਾਲ ਹਟਾਓ",
+          saveQuiz: "ਕੁਇਜ਼ ਸੰਭਾਲੋ",
+          fillQuizPrompt: "ਕਿਰਪਾ ਕਰਕੇ ਘੱਟੋ-ਘੱਟ 1 ਸਵਾਲ ਅਤੇ 2 ਵਿਕਲਪ ਭਰੋ।",
+          delete: "ਹਟਾਓ",
+          confirmDelete: "ਕੀ ਤੁਸੀਂ ਵਾਕਈ ਇਸ ਯੂਜ਼ਰ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?",
+          selfDelete: "ਤੁਸੀਂ ਆਪਣਾ ਖੁਦ ਦਾ ਐਡਮਿਨ ਖਾਤਾ ਨਹੀਂ ਹਟਾ ਸਕਦੇ।",
+          teachersDir: "ਅਧਿਆਪਕ",
+          studentsDir: "ਵਿਦਿਆਰਥੀ",
+          cancel: "ਰੱਦ ਕਰੋ",
+          status: "ਸਥਿਤੀ",
+          actions: "ਕਾਰਵਾਈਆਂ",
+          noTeachers: "ਕੋਈ ਅਧਿਆਪਕ ਰਜਿਸਟਰ ਨਹੀਂ ਹੈ।",
+          assignedClass: "ਨਿਰਧਾਰਿਤ ਜਮਾਤ",
+          assignedForYou: "ਤੁਹਾਡਾ ਨਿਰਧਾਰਿਤ ਵਿਸ਼ਾ ਅਤੇ ਜਮਾਤ",
+          lessonContent: "ਪਾਠ ਸਮੱਗਰੀ",
+          lessonContentPlaceholder: "ਪਾਠ ਦੇ ਨੋਟਸ, ਵਿਆਖਿਆ ਜਾਂ ਅਧਿਐਨ ਸਮੱਗਰੀ ਇੱਥੇ ਲਿਖੋ...",
+          noContent: "ਇਸ ਪਾਠ ਲਈ ਅਜੇ ਕੋਈ ਸਮੱਗਰੀ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।",
+          optional: "ਵਿਕਲਪਿਕ",
+          editProfile: "ਪ੍ਰੋਫਾਈਲ ਸੋਧੋ",
+          profileHint: "ਤੁਸੀਂ ਆਪਣਾ ਨਾਮ, ਯੂਜ਼ਰ ਨਾਮ ਅਤੇ ਪਾਸਵਰਡ ਬਦਲ ਸਕਦੇ ਹੋ।",
+          newPasswordOptional: "ਨਵਾਂ ਪਾਸਵਰਡ (ਮੌਜੂਦਾ ਪਾਸਵਰਡ ਰੱਖਣ ਲਈ ਖਾਲੀ ਛੱਡੋ)",
+          adminOnlyNotice: "ਜਮਾਤ ਅਤੇ ਵਿਸ਼ੇ ਵਿੱਚ ਤਬਦੀਲੀ ਸਿਰਫ਼ ਸਕੂਲ ਐਡਮਿਨ ਦੁਆਰਾ ਹੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ।",
+          profileSaved: "ਪ੍ਰੋਫਾਈਲ ਸਫਲਤਾਪੂਰਵਕ ਅੱਪਡੇਟ ਹੋ ਗਈ!",
+          fillRequiredFields: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਪੂਰਾ ਨਾਮ ਅਤੇ ਯੂਜ਼ਰ ਨਾਮ ਦਰਜ ਕਰੋ।",
+          allSubjects: "ਸਾਰੇ ਵਿਸ਼ੇ",
+          resetFilters: "ਫਿਲਟਰ ਰੀਸੈੱਟ ਕਰੋ",
+          viewContent: "ਸਮੱਗਰੀ ਵੇਖੋ",
+          viewQuestions: "ਸਵਾਲ ਵੇਖੋ",
+          close: "ਬੰਦ ਕਰੋ",
+          lesson: "ਪਾਠ",
+          noQuizzes: "ਇਸ ਜਮਾਤ ਅਤੇ ਵਿਸ਼ੇ ਲਈ ਕੋਈ ਕੁਇਜ਼ ਨਹੀਂ ਮਿਲੀ।",
+          filter: "ਫਿਲਟਰ",
+        },
+      };
+      const X = {
+        en: {
+          tag: "Free learning for Nabha",
+          hero: "Learn anywhere. Even without internet.",
+          heroSub:
+            "Free lessons, quizzes and progress tracking for the students of Nabha, in Punjabi, Hindi and English.",
+          f1: "Works offline",
+          f1d: "Download lessons and keep learning without internet.",
+          f2: "3 languages",
+          f2d: "Punjabi, Hindi and English, one tap away.",
+          f3: "Track progress",
+          f3d: "See your growth with rings, badges and scores.",
+          f4: "For everyone",
+          f4d: "Students, teachers and admins, each with their own dashboard.",
+        },
+        hi: {
+          tag: "नाभा के लिए मुफ़्त शिक्षा",
+          hero: "कहीं भी सीखें। इंटरनेट के बिना भी।",
+          heroSub:
+            "नाभा के विद्यार्थियों के लिए मुफ़्त पाठ, क्विज़ और प्रगति ट्रैकिंग, पंजाबी, हिंदी और अंग्रेज़ी में।",
+          f1: "ऑफ़लाइन चलता है",
+          f1d: "पाठ डाउनलोड करें और बिना इंटरनेट के पढ़ते रहें।",
+          f2: "3 भाषाएँ",
+          f2d: "पंजाबी, हिंदी और अंग्रेज़ी, बस एक टैप में।",
+          f3: "प्रगति देखें",
+          f3d: "रिंग, बैज और अंकों से अपनी तरक्की देखें।",
+          f4: "सबके लिए",
+          f4d: "विद्यार्थी, शिक्षक और एडमिन, सबका अपना डैशबोर्ड।",
+        },
+        pa: {
+          tag: "ਨਾਭਾ ਲਈ ਮੁਫ਼ਤ ਸਿੱਖਿਆ",
+          hero: "ਕਿਤੇ ਵੀ ਸਿੱਖੋ। ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ।",
+          heroSub:
+            "ਨਾਭਾ ਦੇ ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਮੁਫ਼ਤ ਪਾਠ, ਕੁਇਜ਼ ਅਤੇ ਤਰੱਕੀ ਟਰੈਕਿੰਗ, ਪੰਜਾਬੀ, ਹਿੰਦੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ।",
+          f1: "ਆਫ਼ਲਾਈਨ ਚੱਲਦਾ ਹੈ",
+          f1d: "ਪਾਠ ਡਾਊਨਲੋਡ ਕਰੋ ਅਤੇ ਬਿਨਾਂ ਇੰਟਰਨੈੱਟ ਪੜ੍ਹਦੇ ਰਹੋ।",
+          f2: "3 ਭਾਸ਼ਾਵਾਂ",
+          f2d: "ਪੰਜਾਬੀ, ਹਿੰਦੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ, ਸਿਰਫ਼ ਇੱਕ ਟੈਪ ਵਿੱਚ।",
+          f3: "ਤਰੱਕੀ ਵੇਖੋ",
+          f3d: "ਰਿੰਗ, ਬੈਜ ਅਤੇ ਅੰਕਾਂ ਨਾਲ ਆਪਣੀ ਤਰੱਕੀ ਵੇਖੋ।",
+          f4: "ਸਭ ਲਈ",
+          f4d: "ਵਿਦਿਆਰਥੀ, ਅਧਿਆਪਕ ਅਤੇ ਐਡਮਿਨ, ਹਰ ਕਿਸੇ ਦਾ ਆਪਣਾ ਡੈਸ਼ਬੋਰਡ।",
+        },
+      };
+      for (const l in X) Object.assign(D[l], X[l]);
+      let S = {
+        lang: localStorage.lang || "pa",
+        role: "student",
+        reg: false,
+        user: JSON.parse(localStorage.user || "null"),
+        token: localStorage.token || "",
+        c: null,
+        p: { l: [], q: {} },
+        users: [],
+        stu: [],
+        ann: [],
+        msg: "",
+        cur: null,
+        qa: {},
+        res: null,
+        cfg: {},
+        toast: "",
+        editU: null,
+        regSub: "Maths",
+        regTeachCls: 8,
+        profile: false,
+        admTab: "users",
+        admCls: "all",
+        admSub: "all",
+        admViewL: null,
+        admViewQ: null,
+      };
+      const g = (i) => document.getElementById(i),
+        t = (k) => D[S.lang][k] || D.en[k] || k,
+        L = (o) => (o ? o[S.lang] || o.en || "" : "");
+      const esc = (s) =>
+        String(s == null ? "" : s).replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+        );
+      async function api(u, m, b) {
+        const r = await fetch(u, {
+          method: m || "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + S.token,
+          },
+          body: b ? JSON.stringify(b) : undefined,
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw j;
+        return j;
+      }
+      const pct = () => {
+        if (!S.c || !S.user) return 0;
+        let lessons = S.c.lessons || [];
+        let quizzes = S.c.quizzes || [];
+        if (S.user.role === "student" && S.user.class) {
+          lessons = lessons.filter(
+            (l) => Number(l.c) === Number(S.user.class),
+          );
+          const lessonIds = new Set(lessons.map((l) => l.id));
+          quizzes = quizzes.filter((q) => lessonIds.has(q.lesson));
+        }
+        const n = lessons.length + quizzes.length;
+        if (!n) return 0;
+        const doneL = (S.p.l || []).filter((id) =>
+          lessons.some((l) => l.id === id),
+        ).length;
+        const doneQ = Object.keys(S.p.q || {}).filter((id) =>
+          quizzes.some((q) => q.id == id),
+        ).length;
+        return Math.round(((doneL + doneQ) / n) * 100);
+      };
+      function hdr() {
+        return `<header class="${S.user ? "" : "land"}"><b class=logo>🎓 ${t("app")}</b><span class=sp></span>${["en", "hi", "pa"].map((l) => `<button class="lg ${S.lang == l ? "on" : ""}" onclick="setL('${l}')">${{ en: "EN", hi: "हिं", pa: "ਪੰ" }[l]}</button>`).join("")}<span class="dot ${navigator.onLine ? "ok" : "off"}">● ${t(navigator.onLine ? "online" : "offline")}</span>${S.user ? `<button onclick="doSync()">⟳ ${t("sync")}</button>` : ""}<button onclick="document.body.classList.toggle('dark')">🌓</button>${S.user ? `<button onclick="logout()">${t("logout")}</button>` : ""}</header>`;
+      }
+      function loginV() {
+        const r = S.role;
+        const regFields = S.reg
+          ? `<input id=nm placeholder="${t("name")}">${
+              r == "student"
+                ? `<input id=cl type=number min=6 max=12 value=8 placeholder="${t("cls")}">`
+                : r == "teacher"
+                ? `<label style="font-size:12px;color:var(--sub);margin:6px 0 2px;display:block;text-align:left;font-weight:600">📚 ${t("subject")}</label><select id=sub_reg onchange="S.regSub=this.value">${["Maths", "Science", "English", "Punjabi"].map((s) => `<option value="${s}" ${((S.regSub || "Maths") === s) ? "selected" : ""}>${t(s)}</option>`).join("")}</select><label style="font-size:12px;color:var(--sub);margin:6px 0 2px;display:block;text-align:left;font-weight:600">🏫 ${t("assignedClass")}</label><select id=cl_teach onchange="S.regTeachCls=this.value">${[6, 7, 8, 9, 10, 11, 12].map((c) => `<option value="${c}" ${((S.regTeachCls || 8) == c) ? "selected" : ""}>${t("cls")} ${c}</option>`).join("")}</select>`
+                : ""
+            }`
+          : "";
+        return `<div class=tabs>${["student", "teacher", "admin"].map((x) => `<button class="${r == x ? "on" : ""}" onclick="S.role='${x}';S.msg='';if(S.role=='admin')S.reg=false;render()">${{ student: "🎒", teacher: "👩‍🏫", admin: "🛠️" }[x]}<br>${t(x)}</button>`).join("")}</div><h2>${t(r)} – ${t(S.reg ? "register" : "login")}</h2>${regFields}<input id=un placeholder="${t("username")}" autocapitalize=off autocomplete=username><input id=pw type=password placeholder="${t("password")}" autocomplete=current-password><button class=pri onclick="doAuth()">${t(S.reg ? "register" : "login")} →</button>${r != "admin" ? `<a onclick="S.reg=!S.reg;S.msg='';render()">${t(S.reg ? "haveacc" : "newacc")}</a>` : ""}<p class=err>${S.msg ? t(S.msg) : ""}</p>`;
+      }
+      function landV() {
+        return `<section class=hero><div class="blob b1"></div><div class="blob b2"></div><div class=hero-in><div class=hl><span class=pill>🌾 ${t("tag")}</span><h1>${t("hero")}</h1><p class=sub>${t("heroSub")}</p><div class=chips><span>📴 ${t("f1")}</span><span>🗣️ ${t("f2")}</span><span>📈 ${t("f3")}</span></div></div><div class=glass>${loginV()}</div></div></section><section class=feats>${[
+          ["📴", "f1"],
+          ["🗣️", "f2"],
+          ["📈", "f3"],
+          ["👥", "f4"],
+        ]
+          .map(
+            ([i, k]) =>
+              `<div class=fc><i>${i}</i><h3>${t(k)}</h3><p>${t(k + "d")}</p></div>`,
+          )
+          .join("")}</section>`;
+      }
+      async function doAuth() {
+        const b = {
+          username: g("un").value.trim(),
+          password: g("pw").value,
+          role: S.role,
+        };
+        try {
+          if (S.reg) {
+            b.name = g("nm").value.trim();
+            if (g("cl")) b.class = +g("cl").value;
+            if (S.role === "teacher") {
+              const sel = g("sub_reg");
+              b.subject = S.regSub || (sel ? sel.value : "Maths");
+              const tCls = g("cl_teach");
+              b.class = +(S.regTeachCls || (tCls ? tCls.value : 8));
+            }
+          }
+          const r = await api(
+            S.reg ? "/api/register" : "/api/login",
+            "POST",
+            b,
+          );
+          if (r.pending) {
+            S.reg = false;
+            S.msg = "wait";
+            return render();
+          }
+          S.token = r.token;
+          S.user = r.user;
+          localStorage.token = r.token;
+          localStorage.user = JSON.stringify(r.user);
+          S.msg = "";
+          S.reg = false;
+          boot();
+        } catch (e) {
+          S.msg = e.error || "wrong";
+          render();
+        }
+      }
+      async function logout() {
+        try { if (typeof flush === "function") await flush(); } catch (e) {}
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        S.user = null;
+        S.token = "";
+        S.p = { l: [], q: {} };
+        render();
+      }
+      async function boot() {
+        const [c, pRes, u, s, a, cf] = await Promise.all([
+          api("/api/content"),
+          api("/api/progress"),
+          S.role === "admin" ? api("/api/admin/users") : null,
+          S.role === "teacher" ? api("/api/teacher/students") : null,
+          api("/api/announcements"),
+          api("/api/config"),
+        ]);
+        if (c) S.c = c;
+        if (pRes) {
+          const p = pRes.progress || (pRes.l ? pRes : null);
+          if (p) S.p = { l: p.l || [], q: p.q || {} };
+        }
+        if (S.user && S.user.id && localStorage["p" + S.user.id]) {
+          try {
+            const localP = JSON.parse(localStorage["p" + S.user.id]);
+            if (localP && localP.l) {
+              for (const lid of (localP.l || [])) {
+                if (!S.p.l.includes(lid)) S.p.l.push(lid);
+              }
+              S.p.q = Object.assign({}, localP.q || {}, S.p.q || {});
+            }
+          } catch (e) {}
+        }
+        if (u) S.users = u;
+        if (s) S.stu = s;
+        if (a) S.ann = a;
+        if (cf) S.cfg = cf;
+        render();
+      }
+      function annV() {
+        return S.ann.length
+          ? S.ann
+              .map(
+                (a) =>
+                  `<div class=item>📢 ${esc(a.text)}<br><small>${esc(a.by)}</small></div>`,
+              )
+              .join("")
+          : `<p>${t("noAnn")}</p>`;
+      }
+      function studV() {
+        const c = S.c;
+        if (S.cur && S.cur.k == "lesson") return lessonV();
+        if (S.cur && S.cur.k == "quiz") return quizV();
+        const userClass = Number(S.user.class) || 6;
+        const classLessons = (c.lessons || []).filter(
+          (l) => Number(l.c) === userClass,
+        );
+        const classLessonIds = new Set(classLessons.map((l) => l.id));
+        const classQuizzes = (c.quizzes || []).filter((q) =>
+          classLessonIds.has(q.lesson),
+        );
+        const doneL = (S.p.l || []).filter((id) =>
+          classLessonIds.has(Number(id)),
+        ).length;
+        const doneQ = Object.keys(S.p.q || {}).filter((qid) =>
+          classQuizzes.some((q) => Number(q.id) === Number(qid)),
+        ).length;
+        const P = pct();
+        return `<div class=banner style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+  <div>
+    <h2>👋 ${esc(S.user.name)}</h2>
+    <small>${t("cls")} ${S.user.class}</small>
+  </div>
+  <button onclick="S.profile=!S.profile;render()" style="padding:6px 14px;border-radius:20px;cursor:pointer">⚙️ ${t("editProfile")}</button>
+</div>
+${profileV()}
+<div class="row card">
+  <div class=ring style="--v:${P}"><span>${P}%</span></div>
+  <div>
+    <b>${t("overall")}</b>
+    <p>${t("lessons")}: ${doneL}/${classLessons.length}<br>${t("quizzes")}: ${doneQ}/${classQuizzes.length}<br>🏅 ${t("badges")}: ${Math.floor(doneL / 2)}</p>
+  </div>
+</div>
+${P == 0 ? `<div class=hint>${t("start")}</div>` : ""}
+<h3>${t("lessons")} (${t("cls")} ${S.user.class})</h3>
+${
+  classLessons.length
+    ? classLessons
+        .map(
+          (l) =>
+            `<div class=item onclick="S.cur={k:'lesson',id:${l.id}};render()"><span class=ic>${{ Maths: "➗", Science: "🔬", English: "🔤", Punjabi: "ਅ" }[l.s] || "📘"}</span><div class=gr><b>${esc(L(l.t))}</b><br><small>${t(l.s)} · ${t("cls")} ${l.c}</small></div><span class=ck>${S.p.l.includes(l.id) ? "✅" : "›"}</span></div>`,
+        )
+        .join("")
+    : `<p>${t("noLessons")}</p>`
+}
+<h3>${t("ann")}</h3>${annV()}`;
+      }
+      function lessonV() {
+        const l = S.c.lessons.find((x) => x.id == S.cur.id),
+          q = S.c.quizzes.find((x) => x.lesson == l.id),
+          d = S.p.l.includes(l.id);
+        const lessonContent = (l.content && L(l.content)) || (l.n && L(l.n)) || t("noContent");
+        return `<button onclick="S.cur=null;render()">← ${t("back")}</button>
+<div class=banner style="margin-top:10px">
+  <h2>${esc(L(l.t))}</h2>
+  <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+    <span class=pill>📚 ${t(l.s)}</span>
+    <span class=pill style="background:var(--s1,#eef2ff)">🏫 ${t("cls")} ${l.c}</span>
+    ${l.authorName ? `<small style="opacity:0.9;align-self:center">👩‍🏫 ${esc(l.authorName)}</small>` : ""}
+  </div>
+</div>
+<div class=card style="margin:16px 0;line-height:1.7;font-size:1.05rem;white-space:pre-wrap;background:var(--card,#fff);border-left:4px solid var(--p,#3b82f6)">
+  <h4 style="margin:0 0 8px 0;color:var(--p,#3b82f6)">📖 ${t("lessonContent")}</h4>
+  <div>${esc(lessonContent)}</div>
+</div>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+  ${d ? `<span class=pill style="background:#10b98120;color:#059669;font-weight:bold">✅ ${t("done")}</span>` : `<button class=pri onclick="act('l',${l.id});render()">✔️ ${t("markDone")}</button>`}
+  ${q ? `<button class=pri onclick="S.cur={k:'quiz',id:${q.id}};S.qa={};S.res=null;render()">📝 ${t("takeQuiz")}${S.p.q[q.id] != null ? " (" + t("score") + ": " + S.p.q[q.id] + "%)" : ""}</button>` : ""}
+</div>`;
+      }
+      function quizV() {
+        const q = S.c.quizzes.find((x) => x.id == S.cur.id);
+        return `<button onclick="S.cur={k:'lesson',id:${q.lesson}};render()">← ${t("back")}</button><h2>📝 ${t("quizzes")}</h2>${q.q.map((x, i) => `<div class=card><b>${i + 1}. ${esc(L(x.q))}</b>${x.o.map((o, j) => `<label class="opt ${S.res != null ? (j == x.a ? "good" : S.qa[i] == j ? "bad" : "") : ""}"><input type=radio name=q${i} ${S.res != null ? "disabled" : ""} onclick="S.qa[${i}]=${j}"> ${esc(typeof o == "string" ? o : L(o))}</label>`).join("")}</div>`).join("")}${S.res != null ? `<h3>${t("score")}: ${S.res}%</h3>` : `<button class=pri onclick="subQ(${q.id})">${t("submit")}</button>`}`;
+      }
+      function subQ(id) {
+        const q = S.c.quizzes.find((x) => x.id == id);
+        S.res = Math.round(
+          (q.q.filter((x, i) => S.qa[i] === x.a).length / q.q.length) * 100,
+        );
+        act("q", id, S.res);
+        if (q && q.lesson) {
+          act("l", q.lesson);
+        }
+        render();
+      }
+      function act(ty, id, sc) {
+        if (ty == "l") {
+          if (!S.p.l.includes(id)) S.p.l.push(id);
+        } else {
+          S.p.q[id] = sc;
+          if (!S.p.l.includes(id)) S.p.l.push(id);
+        }
+        if (S.user && S.user.id) {
+          localStorage["p" + S.user.id] = JSON.stringify(S.p);
+        }
+        const Q = JSON.parse(localStorage.q || "[]");
+        Q.push({ t: ty, type: ty, id, score: sc, u: (S.user && S.user.id), at: Date.now() });
+        localStorage.q = JSON.stringify(Q);
+        flush();
+      }
+      async function flush() {
+        if (!S.user || !S.user.id) return false;
+        const Q = JSON.parse(localStorage.q || "[]").filter(
+          (o) => o.u == S.user.id,
+        );
+        if (!Q.length || !navigator.onLine) return false;
+        try {
+          const res = await api("/api/sync", "POST", { ops: Q });
+          localStorage.q = JSON.stringify(
+            JSON.parse(localStorage.q || "[]").filter((o) => o.u != S.user.id),
+          );
+          if (res && res.progress) {
+            S.p = { l: res.progress.l || [], q: res.progress.q || {} };
+            localStorage["p" + S.user.id] = JSON.stringify(S.p);
+          }
+          return true;
+        } catch {
+          return false;
+        }
+      }
+      async function doSync() {
+        await flush();
+        if (navigator.onLine) await boot();
+        S.toast = t("synced");
+        render();
+        setTimeout(() => {
+          S.toast = "";
+          render();
+        }, 1800);
+      }
+      function teachV() {
+        S.tFilter = S.tFilter || "my";
+        S.cFilter = S.cFilter || "all";
+        if (S.quizL) {
+          const l = (S.c && S.c.lessons && S.c.lessons.find((x) => x.id == S.quizL)) || { t: { en: "Lesson" }, c: 8, id: S.quizL };
+          return `<div class=banner><h2>👩‍🏫 ${esc(S.user.name)}</h2></div>
+<div class=card>
+  <button onclick="S.quizL=null;render()">← ${t("back")}</button>
+  <h3>📝 ${t("createQuiz")} – ${esc(L(l.t))} (${t("cls")} ${l.c})</h3>
+  ${(S.quizQ || []).map((qItem, qIdx) => `
+    <div style="background:var(--bg);padding:14px;border-radius:14px;margin-bottom:12px;border:1px solid var(--b)">
+      <b>${t("question")} ${qIdx + 1}</b>
+      <input id="qz_q_en_${qIdx}" value="${esc((qItem.q && qItem.q.en) || "")}" placeholder="${t("question")} (EN)" oninput="S.quizQ[${qIdx}].q.en=this.value">
+      <input id="qz_q_hi_${qIdx}" value="${esc((qItem.q && qItem.q.hi) || "")}" placeholder="${t("question")} (HI)" oninput="S.quizQ[${qIdx}].q.hi=this.value">
+      <input id="qz_q_pa_${qIdx}" value="${esc((qItem.q && qItem.q.pa) || "")}" placeholder="${t("question")} (PA)" oninput="S.quizQ[${qIdx}].q.pa=this.value">
+      <small><b>${t("options")}:</b></small>
+      ${[0, 1, 2, 3].map(optIdx => `
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+          <input type="radio" name="opt_correct_${qIdx}" value="${optIdx}" ${qItem.a === optIdx ? "checked" : ""} onchange="S.quizQ[${qIdx}].a=${optIdx}" style="width:auto">
+          <input value="${esc(qItem.o[optIdx] != null ? (typeof qItem.o[optIdx] == "string" ? qItem.o[optIdx] : (qItem.o[optIdx].en || "")) : "")}" placeholder="Option ${optIdx + 1}" oninput="S.quizQ[${qIdx}].o[${optIdx}]=this.value" style="flex:1">
+        </div>
+      `).join("")}
+      ${S.quizQ.length > 1 ? `<button style="margin-top:8px;color:#d64545" onclick="S.quizQ.splice(${qIdx},1);render()">🗑️ ${t("removeQuestion")}</button>` : ""}
+    </div>
+  `).join("")}
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+    <button onclick="S.quizQ.push({ q: { en: '', hi: '', pa: '' }, o: ['', '', '', ''], a: 0 });render()">➕ ${t("addQuestion")}</button>
+    <button class=pri onclick="saveQuiz(${l.id})">💾 ${t("saveQuiz")}</button>
+    <button onclick="S.quizL=null;render()">${t("back")}</button>
+  </div>
+</div>`;
+        }
+        const a = S.stu.length
+          ? Math.round(S.stu.reduce((s, x) => s + x.p, 0) / S.stu.length)
+          : 0;
+        const allLessons = (S.c && S.c.lessons) || [];
+        const myLessons = allLessons.filter((l) => l.authorId === S.user.id);
+        let displayedLessons = S.tFilter === "my" ? myLessons : allLessons;
+        if (S.cFilter !== "all") {
+          displayedLessons = displayedLessons.filter(
+            (l) => Number(l.c) === Number(S.cFilter),
+          );
+        }
+
+        return `<div class=banner style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+  <div>
+    <h2>👩‍🏫 ${esc(S.user.name)}</h2>
+    <small>${t("subject")}: ${t(normSubj(S.user.subject)) || esc(S.user.subject || "Maths")}${S.user.class ? ` · ${t("cls")} ${S.user.class}` : ""}</small>
+  </div>
+  <button onclick="S.profile=!S.profile;render()" style="padding:6px 14px;border-radius:20px;cursor:pointer">⚙️ ${t("editProfile")}</button>
+</div>
+${profileV()}
+<div class=row>
+  <div class=stat><b>${S.stu.length}</b>${t("students")}</div>
+  <div class=stat><b>${allLessons.length}</b>${t("lessons")}</div>
+  <div class=stat><b>${myLessons.length}</b>${t("myLessons")}</div>
+  <div class=stat><b>${a}%</b>${t("avg")}</div>
+</div>
+
+<h3>${t("students")}${S.user.class ? ` (${t("cls")} ${S.user.class})` : ""}</h3>
+${S.stu.length ? `<table>${S.stu.map((x) => `<tr><td>${esc(x.name)}</td><td>${t("cls")} ${x.class}</td><td><div class=bar><i style="width:${x.p}%"></i></div></td><td>${x.p}%</td></tr>`).join("")}</table>` : `<p>${t("noStu")}</p>`}
+
+<div class=row style="justify-content:space-between;align-items:center;margin-top:20px;gap:8px">
+  <h3 style="margin:0">${t("lessons")}</h3>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <select style="width:auto;padding:6px 10px;margin:0" onchange="S.cFilter=this.value;render()">
+      <option value="all" ${S.cFilter == "all" ? "selected" : ""}>${t("allClasses")}</option>
+      ${[6, 7, 8, 9, 10, 11, 12].map((c) => `<option value="${c}" ${S.cFilter == c ? "selected" : ""}>${t("cls")} ${c}</option>`).join("")}
+    </select>
+    <div class=tabs style="max-width:300px">
+      <button class="${S.tFilter == "my" ? "on" : ""}" onclick="S.tFilter='my';S.editL=null;render()">${t("myLessons")} (${myLessons.length})</button>
+      <button class="${S.tFilter == "all" ? "on" : ""}" onclick="S.tFilter='all';S.editL=null;render()">${t("allLessons")} (${allLessons.length})</button>
+    </div>
+  </div>
+</div>
+
+${
+  displayedLessons.length
+    ? displayedLessons
+        .map((l) => {
+          const isOwner = l.authorId === S.user.id || S.user.role === "admin";
+          const hasQuiz = (S.c.quizzes || []).some((q) => q.lesson == l.id);
+          if (S.editL === l.id) {
+            return `<div class=card>
+              <h4>✏️ ${t("editLesson")}</h4>
+              <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+                <span class=pill style="font-weight:600">📚 ${t(l.s)}</span>
+                <span class=pill style="font-weight:600;background:var(--s1,#eef2ff)">🏫 ${t("cls")} ${l.c}</span>
+              </div>
+              <b style="font-size:13px">${t("title")}:</b>
+              <input id=ed_t_en value="${esc((l.t && l.t.en) || "")}" placeholder="${t("title")} (EN)">
+              <input id=ed_t_hi value="${esc((l.t && l.t.hi) || "")}" placeholder="${t("title")} (HI)">
+              <input id=ed_t_pa value="${esc((l.t && l.t.pa) || "")}" placeholder="${t("title")} (PA)">
+              <b style="font-size:13px;display:block;margin-top:10px">📖 ${t("lessonContent")}:</b>
+              <textarea id=ed_cnt_en rows=4 placeholder="${t("lessonContentPlaceholder")} (EN)" style="width:100%;border-radius:12px;padding:10px;border:1px solid var(--b);font-family:inherit;margin:4px 0">${esc((l.content && l.content.en) || (l.n && l.n.en) || "")}</textarea>
+              <textarea id=ed_cnt_hi rows=3 placeholder="${t("lessonContentPlaceholder")} (HI - ${t("optional")})" style="width:100%;border-radius:12px;padding:10px;border:1px solid var(--b);font-family:inherit;margin:4px 0">${esc((l.content && l.content.hi) || (l.n && l.n.hi) || "")}</textarea>
+              <textarea id=ed_cnt_pa rows=3 placeholder="${t("lessonContentPlaceholder")} (PA - ${t("optional")})" style="width:100%;border-radius:12px;padding:10px;border:1px solid var(--b);font-family:inherit;margin:4px 0">${esc((l.content && l.content.pa) || (l.n && l.n.pa) || "")}</textarea>
+              <div style="margin-top:10px">
+                <button class=pri onclick="saveEditL(${l.id})">${t("save")}</button>
+                <button onclick="S.editL=null;render()">${t("back")}</button>
+              </div>
+            </div>`;
+          }
+          return `<div class=card style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div>
+              <b>${esc(L(l.t))}</b> · <small>${t(l.s)} (${t("cls")} ${l.c})</small><br>
+              <small style="opacity:0.8">👤 ${l.authorName ? esc(l.authorName) : t("systemLesson")} ${isOwner ? `· <b>(${t("you")})</b>` : `· <span style="color:#d97706">(${t("readOnly")})</span>`}</small>
+              ${hasQuiz ? `<br><small style="color:var(--p2)">✅ ${t("quizzes")}</small>` : ""}
+            </div>
+            <div style="display:flex;gap:6px;align-items:center">
+              ${isOwner ? `<button onclick="S.editL=${l.id};render()">✏️ ${t("edit")}</button><button onclick="openQuizBuilder(${l.id})">📝 ${hasQuiz ? t("editQuiz") : t("createQuiz")}</button>` : `<span style="font-size:0.85rem;opacity:0.7">🔒 ${t("readOnly")}</span>`}
+            </div>
+          </div>`;
+        })
+        .join("")
+    : `<p>${S.tFilter == "my" ? t("noMyLessons") : t("noLessons")}</p>`
+}
+
+<h3>${t("add")}</h3>
+<div class=card>
+  <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+    <span class=pill style="font-weight:600">📚 ${t(normSubj(S.user.subject)) || esc(S.user.subject || "Maths")}</span>
+    <span class=pill style="font-weight:600;background:var(--s1,#eef2ff)">🏫 ${t("cls")} ${S.user.class || 8}</span>
+    <small style="color:var(--sub)">(${t("assignedForYou")})</small>
+  </div>
+  <b style="font-size:13px">${t("title")}:</b>
+  ${["en", "hi", "pa"].map((l) => `<input id=t_${l} placeholder="${t("title")} (${l.toUpperCase()})">`).join("")}
+  <b style="font-size:13px;display:block;margin-top:10px">📖 ${t("lessonContent")}:</b>
+  <textarea id=cnt_en rows=4 placeholder="${t("lessonContentPlaceholder")} (EN)" style="width:100%;border-radius:12px;padding:10px;border:1px solid var(--b);font-family:inherit;margin:4px 0"></textarea>
+  <textarea id=cnt_hi rows=3 placeholder="${t("lessonContentPlaceholder")} (HI - ${t("optional")})" style="width:100%;border-radius:12px;padding:10px;border:1px solid var(--b);font-family:inherit;margin:4px 0"></textarea>
+  <textarea id=cnt_pa rows=3 placeholder="${t("lessonContentPlaceholder")} (PA - ${t("optional")})" style="width:100%;border-radius:12px;padding:10px;border:1px solid var(--b);font-family:inherit;margin:4px 0"></textarea>
+  <button class=pri onclick="addL()" style="margin-top:8px">${t("add")}</button>
+</div>
+
+<h3>${t("ann")}</h3>
+<div class=card>
+  <input id=an placeholder="${t("msg")}">
+  <button class=pri onclick="postA()">${t("post")}</button>
+</div>
+${annV()}`;
+      }
+      function openQuizBuilder(id) {
+        S.quizL = id;
+        const existing = (S.c.quizzes || []).find((q) => q.lesson == id);
+        if (existing && Array.isArray(existing.q) && existing.q.length) {
+          S.quizQ = JSON.parse(JSON.stringify(existing.q)).map(item => ({
+            q: typeof item.q == "string" ? { en: item.q, hi: item.q, pa: item.q } : item.q,
+            o: item.o.map(opt => typeof opt == "string" ? opt : (opt.en || "")),
+            a: item.a || 0
+          }));
+        } else {
+          S.quizQ = [{ q: { en: "", hi: "", pa: "" }, o: ["", "", "", ""], a: 0 }];
+        }
+        render();
+      }
+      async function saveQuiz(lessonId) {
+        const valid = (S.quizQ || []).filter(
+          (q) => q.q && q.q.en && q.q.en.trim() && Array.isArray(q.o) && q.o.filter((x) => x && String(x).trim()).length >= 2,
+        );
+        if (!valid.length) {
+          alert(t("fillQuizPrompt"));
+          return;
+        }
+        const formatted = valid.map((q) => ({
+          q: {
+            en: q.q.en.trim(),
+            hi: (q.q.hi && q.q.hi.trim()) || q.q.en.trim(),
+            pa: (q.q.pa && q.q.pa.trim()) || q.q.en.trim(),
+          },
+          o: q.o.map((x) => String(x || "").trim()).filter(Boolean),
+          a: Math.min(q.a || 0, q.o.filter(Boolean).length - 1),
+        }));
+        await api("/api/teacher/quiz", "POST", { lessonId, questions: formatted });
+        S.quizL = null;
+        boot();
+      }
+      async function addL() {
+        if (!g("t_en").value.trim()) return;
+        const subj = (S.user && S.user.subject) ? normSubj(S.user.subject) : "Maths";
+        const cls = (S.user && S.user.class) ? Number(S.user.class) : 8;
+        const content = {
+          en: g("cnt_en") ? g("cnt_en").value.trim() : "",
+          hi: g("cnt_hi") ? g("cnt_hi").value.trim() : "",
+          pa: g("cnt_pa") ? g("cnt_pa").value.trim() : "",
+        };
+        await api("/api/teacher/lesson", "POST", {
+          en: g("t_en").value.trim(),
+          hi: g("t_hi") ? g("t_hi").value.trim() : "",
+          pa: g("t_pa") ? g("t_pa").value.trim() : "",
+          subject: subj,
+          cls: cls,
+          content,
+          note: content.en,
+        });
+        boot();
+      }
+      async function saveEditL(id) {
+        const en = g("ed_t_en").value.trim();
+        if (!en) return;
+        const l = (S.c && S.c.lessons && S.c.lessons.find((x) => x.id == id)) || {};
+        const subj = (S.user && S.user.role === "teacher" && S.user.subject) ? normSubj(S.user.subject) : (l.s || "Maths");
+        const cls = (S.user && S.user.role === "teacher" && S.user.class) ? Number(S.user.class) : (l.c || 8);
+        const content = {
+          en: g("ed_cnt_en") ? g("ed_cnt_en").value.trim() : "",
+          hi: g("ed_cnt_hi") ? g("ed_cnt_hi").value.trim() : "",
+          pa: g("ed_cnt_pa") ? g("ed_cnt_pa").value.trim() : "",
+        };
+        await api("/api/teacher/lesson/update", "POST", {
+          id,
+          en,
+          hi: g("ed_t_hi").value.trim(),
+          pa: g("ed_t_pa").value.trim(),
+          subject: subj,
+          cls: cls,
+          content,
+          note: content.en,
+        });
+        S.editL = null;
+        boot();
+      }
+      function profileV() {
+        if (!S.profile || !S.user) return "";
+        const isTeach = S.user.role === "teacher";
+        return `<div class=card style="background:var(--card,#fff);border:2px solid var(--p,#3b82f6);margin-bottom:16px;border-radius:14px;padding:16px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h3 style="margin:0">⚙️ ${t("editProfile")}</h3>
+    <button onclick="S.profile=false;render()" style="background:transparent;border:none;font-size:16px;cursor:pointer">✕</button>
+  </div>
+  <p style="font-size:0.85rem;color:var(--sub);margin:4px 0 10px">${t("profileHint")}</p>
+  
+  <label style="font-weight:600;font-size:13px;display:block;margin-top:8px">${t("name")}:</label>
+  <input id="my_p_name" value="${esc(S.user.name)}" placeholder="${t("name")}">
+  
+  <label style="font-weight:600;font-size:13px;display:block;margin-top:8px">${t("username")}:</label>
+  <input id="my_p_uname" value="${esc(S.user.username)}" placeholder="${t("username")}">
+  
+  <label style="font-weight:600;font-size:13px;display:block;margin-top:8px">${t("pw")} (${t("optional")}):</label>
+  <input id="my_p_pw" type="password" placeholder="${t("newPasswordOptional")}">
+  
+  <div style="background:var(--s1,#f1f5f9);padding:10px 14px;border-radius:10px;margin:12px 0;font-size:0.9rem">
+    🔒 <b>${isTeach ? `${t("subject")}: ${t(normSubj(S.user.subject))} · ${t("cls")} ${S.user.class || 8}` : `${t("cls")} ${S.user.class || 8}`}</b>
+    <br><small style="color:var(--sub)">${t("adminOnlyNotice")}</small>
+  </div>
+  
+  <div style="display:flex;gap:8px">
+    <button class=pri onclick="saveMyProfile()">💾 ${t("save")}</button>
+    <button onclick="S.profile=false;render()">❌ ${t("cancel")}</button>
+  </div>
+</div>`;
+      }
+      async function saveMyProfile() {
+        const name = g("my_p_name") ? g("my_p_name").value.trim() : "";
+        const username = g("my_p_uname") ? g("my_p_uname").value.trim() : "";
+        const password = g("my_p_pw") ? g("my_p_pw").value : "";
+        if (!name || !username) {
+          alert(t("fillRequiredFields"));
+          return;
+        }
+        try {
+          const payload = { name, username };
+          if (password && password.trim()) payload.password = password.trim();
+          const res = await api("/api/user/profile", "POST", payload);
+          if (res.user) {
+            S.user = res.user;
+            localStorage.user = JSON.stringify(res.user);
+          }
+          S.profile = false;
+          S.toast = t("profileSaved");
+          setTimeout(() => { S.toast = ""; render(); }, 3000);
+          render();
+        } catch (e) {
+          alert(e.error === "taken" ? t("taken") : (e.error || "Profile update failed"));
+        }
+      }
+      async function postA() {
+        await api("/api/announce", "POST", { text: g("an").value });
+        boot();
+      }
+      function normSubj(s) {
+        if (!s) return "Maths";
+        const l = String(s).trim().toLowerCase();
+        if (l === "math" || l === "maths" || l === "mathematics") return "Maths";
+        if (l === "science" || l === "sci") return "Science";
+        if (l === "english" || l === "eng") return "English";
+        if (l === "punjabi" || l === "pun") return "Punjabi";
+        return s;
+      }
+      function admV() {
+        const u = S.users || [];
+        const teachers = u.filter((x) => x.role == "teacher");
+        const students = u.filter((x) => x.role == "student");
+        const admins = u.filter((x) => x.role == "admin");
+        const subjects = ["Maths", "Science", "English", "Punjabi"];
+        const classes = [6, 7, 8, 9, 10, 11, 12];
+        const allLessons = (S.c && S.c.lessons) || [];
+        const allQuizzes = (S.c && S.c.quizzes) || [];
+
+        const curTab = S.admTab || "users";
+
+        // Filtering for Lessons & Quizzes
+        const filteredLessons = allLessons.filter((l) => {
+          const matchCls = S.admCls === "all" || String(l.c) === String(S.admCls);
+          const matchSub = S.admSub === "all" || normSubj(l.s) === normSubj(S.admSub);
+          return matchCls && matchSub;
+        });
+
+        const filteredQuizzes = allQuizzes.filter((q) => {
+          const l = allLessons.find((x) => x.id == q.lesson);
+          const lCls = l ? String(l.c) : "";
+          const lSub = l ? normSubj(l.s) : "";
+          const matchCls = S.admCls === "all" || lCls === String(S.admCls);
+          const matchSub = S.admSub === "all" || lSub === normSubj(S.admSub);
+          return matchCls && matchSub;
+        });
+
+        const filterBar = `
+<div class=card style="margin:12px 0;padding:12px;background:var(--card,#f8fafc);display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+  <div style="font-weight:bold;font-size:0.9rem">🔍 ${t("filter")}:</div>
+  <select style="padding:6px 10px;border-radius:6px;border:1px solid var(--border,#cbd5e1);font-weight:600" onchange="S.admCls=this.value;render()">
+    <option value="all" ${S.admCls === "all" ? "selected" : ""}>🎓 ${t("allClasses")}</option>
+    ${classes.map((c) => `<option value="${c}" ${String(S.admCls) === String(c) ? "selected" : ""}>${t("cls")} ${c}</option>`).join("")}
+  </select>
+  <select style="padding:6px 10px;border-radius:6px;border:1px solid var(--border,#cbd5e1);font-weight:600" onchange="S.admSub=this.value;render()">
+    <option value="all" ${S.admSub === "all" ? "selected" : ""}>📚 ${t("allSubjects")}</option>
+    ${subjects.map((s) => `<option value="${s}" ${normSubj(S.admSub) === s ? "selected" : ""}>${t(s)}</option>`).join("")}
+  </select>
+  ${(S.admCls !== "all" || S.admSub !== "all") ? `<button onclick="S.admCls='all';S.admSub='all';render()" style="padding:6px 12px;font-size:0.85rem">🔄 ${t("resetFilters")}</button>` : ""}
+</div>`;
+
+        let contentHtml = "";
+
+        if (curTab === "lessons") {
+          contentHtml = `
+${filterBar}
+<div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px">
+  <h3 style="margin:0">📚 ${t("lessons")} (${filteredLessons.length} / ${allLessons.length})</h3>
+</div>
+${filteredLessons.length ? `<table>
+  <tr>
+    <th>${t("title")}</th>
+    <th>${t("cls")}</th>
+    <th>${t("subject")}</th>
+    <th>${t("teacher")}</th>
+    <th>${t("quizzes")}</th>
+    <th>${t("actions")}</th>
+  </tr>
+  ${filteredLessons.map((l) => {
+    const q = allQuizzes.find((x) => x.lesson == l.id);
+    const isOpen = S.admViewL === l.id;
+    const lContent = (l.content && L(l.content)) || (l.n && L(l.n)) || t("noContent");
+    return `<tr>
+      <td><b>${esc(L(l.t))}</b></td>
+      <td><span class=pill style="font-size:12px;padding:2px 8px;background:var(--s1,#eef2ff)">${t("cls")} ${l.c}</span></td>
+      <td><span class=pill style="font-size:12px;padding:2px 8px">${t(normSubj(l.s))}</span></td>
+      <td>${esc(l.authorName || t("systemLesson"))}</td>
+      <td>${q ? `<span style="color:#059669;font-weight:bold">📝 ${q.q ? q.q.length : 0} Qs</span>` : `<span style="color:var(--sub)">-</span>`}</td>
+      <td>
+        <button onclick="S.admViewL=${isOpen ? "null" : l.id};render()" style="font-size:12px;padding:4px 8px">
+          ${isOpen ? "❌ " + t("close") : "👁️ " + t("viewContent")}
+        </button>
+      </td>
+    </tr>
+    ${isOpen ? `<tr style="background:var(--card,#f9fafb)">
+      <td colspan=6 style="padding:14px;border-left:4px solid var(--p,#3b82f6)">
+        <div style="font-weight:bold;margin-bottom:6px;color:var(--p,#3b82f6)">📖 ${esc(L(l.t))} — ${t("lessonContent")}</div>
+        <div style="white-space:pre-wrap;line-height:1.6;font-size:0.95rem;max-height:300px;overflow-y:auto">${esc(lContent)}</div>
+      </td>
+    </tr>` : ""}`;
+  }).join("")}
+</table>` : `<p class=sub style="padding:16px 0">${t("noLessons")}</p>`}`;
+
+        } else if (curTab === "quizzes") {
+          contentHtml = `
+${filterBar}
+<div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px">
+  <h3 style="margin:0">📝 ${t("quizzes")} (${filteredQuizzes.length} / ${allQuizzes.length})</h3>
+</div>
+${filteredQuizzes.length ? `<table>
+  <tr>
+    <th>${t("lesson")}</th>
+    <th>${t("cls")}</th>
+    <th>${t("subject")}</th>
+    <th>${t("question")}</th>
+    <th>${t("teacher")}</th>
+    <th>${t("actions")}</th>
+  </tr>
+  ${filteredQuizzes.map((q) => {
+    const l = allLessons.find((x) => x.id == q.lesson);
+    const isOpen = S.admViewQ === q.id;
+    return `<tr>
+      <td><b>${esc(l ? L(l.t) : (t("lesson") + " #" + q.lesson))}</b></td>
+      <td><span class=pill style="font-size:12px;padding:2px 8px;background:var(--s1,#eef2ff)">${t("cls")} ${l ? l.c : "-"}</span></td>
+      <td><span class=pill style="font-size:12px;padding:2px 8px">${t(normSubj(l ? l.s : ""))}</span></td>
+      <td><b>${q.q ? q.q.length : 0}</b></td>
+      <td>${esc((l && l.authorName) || t("systemLesson"))}</td>
+      <td>
+        <button onclick="S.admViewQ=${isOpen ? "null" : q.id};render()" style="font-size:12px;padding:4px 8px">
+          ${isOpen ? "❌ " + t("close") : "👁️ " + t("viewQuestions")}
+        </button>
+      </td>
+    </tr>
+    ${isOpen ? `<tr style="background:var(--card,#f9fafb)">
+      <td colspan=6 style="padding:14px;border-left:4px solid #10b981">
+        <div style="font-weight:bold;margin-bottom:8px;color:#059669">📝 ${t("quizzes")}: ${esc(l ? L(l.t) : "")} (${q.q ? q.q.length : 0} ${t("question")})</div>
+        ${(q.q || []).map((quest, qi) => `
+          <div style="margin-bottom:10px;padding:8px 12px;background:#fff;border-radius:6px;border:1px solid var(--border,#e2e8f0)">
+            <b>${qi + 1}. ${esc(L(quest.q))}</b>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-top:6px">
+              ${(quest.o || []).map((opt, oi) => `
+                <div style="padding:4px 8px;border-radius:4px;font-size:0.9rem;${oi === quest.a ? "background:#10b98120;border:1px solid #10b981;font-weight:bold;color:#059669" : "background:var(--bg,#f8fafc);border:1px solid var(--border,#e2e8f0)"}">
+                  ${oi === quest.a ? "✅ " : "⚪ "}${esc(typeof opt === "string" ? opt : L(opt))}
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `).join("")}
+      </td>
+    </tr>` : ""}`;
+  }).join("")}
+</table>` : `<p class=sub style="padding:16px 0">${t("noQuizzes")}</p>`}`;
+
+        } else if (curTab === "ann") {
+          contentHtml = `<h3>${t("ann")}</h3>${annV()}`;
+        } else {
+          // curTab === "users"
+          contentHtml = `
+<h3>📚 ${t("teachersBySubject")}</h3>
+<div class=row>
+  ${subjects
+    .map((s) => {
+      const cnt = teachers.filter((x) => normSubj(x.subject) === s).length;
+      return `<div class=stat><b>${cnt}</b>${t(s)}</div>`;
+    })
+    .join("")}
+</div>
+
+<h3>👩‍🏫 ${t("teachersDir")} (${teachers.length})</h3>
+${teachers.length ? `<table>
+  <tr><th>${t("name")}</th><th>${t("subject")}</th><th>${t("cls")}</th><th>${t("status")}</th><th>${t("actions")}</th></tr>
+  ${teachers
+    .map((x) => {
+      if (S.editU === x.id) {
+        return `<tr style="background:var(--card,#f4f6fa)">
+          <td colspan=5 style="padding:10px">
+            <div style="font-weight:bold;margin-bottom:6px">✏️ ${t("edit")}: ${esc(x.name)}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <input id="eu_name_${x.id}" value="${esc(x.name)}" placeholder="${t("name")}" style="flex:1;min-width:140px">
+              <input id="eu_uname_${x.id}" value="${esc(x.username)}" placeholder="${t("username")}" style="flex:1;min-width:140px">
+              <select id="eu_subj_${x.id}" style="flex:1;min-width:120px">
+                ${subjects.map((s) => `<option value="${s}" ${normSubj(x.subject) === s ? "selected" : ""}>${t(s)}</option>`).join("")}
+              </select>
+              <select id="eu_cls_teach_${x.id}" style="width:110px">
+                ${[6, 7, 8, 9, 10, 11, 12].map((c) => `<option value="${c}" ${(x.class || 8) == c ? "selected" : ""}>${t("cls")} ${c}</option>`).join("")}
+              </select>
+            </div>
+            <button class=pri onclick="admSave('${x.id}')">💾 ${t("save")}</button>
+            <button onclick="admEdit(null)">❌ ${t("cancel")}</button>
+          </td>
+        </tr>`;
+      }
+      return `<tr>
+        <td><b>${esc(x.name)}</b><br><small style="color:var(--sub)">${esc(x.username)}</small></td>
+        <td><span class="pill-subject">${t(normSubj(x.subject))}</span></td>
+        <td><span class="pill-class">${t("cls")} ${x.class || 8}</span></td>
+        <td>${x.approved ? '<span class="badge-status">✔</span>' : '<span style="display:inline-flex;align-items:center;padding:2px 8px;background:#fef3c7;color:#b45309;border-radius:6px;font-size:12px;font-weight:bold">⏳ Pending</span>'}</td>
+        <td style="white-space:nowrap">
+          ${x.approved ? "" : `<button class="btn-approve" onclick="adm('approve','${x.id}')">${t("approve")}</button> `}
+          <button class="btn-action" onclick="admEdit('${x.id}')">✏️ ${t("edit")}</button>
+          <button class="btn-action" onclick="adm('reset','${x.id}')">🔑 ${t("reset")}</button>
+          <button onclick="admDelete(${x.id},'${esc(x.name)}')" style="color:#d9534f">🗑️ ${t("delete")}</button>
+        </td>
+      </tr>`;
+    })
+    .join("")}
+</table>` : `<p class=sub>${t("noTeachers")}</p>`}
+
+<h3>🎒 ${t("studentsDir")} (${students.length})</h3>
+${students.length ? `<table>
+  <tr><th>${t("name")}</th><th>${t("cls")}</th><th>${t("status")}</th><th>${t("actions")}</th></tr>
+  ${students
+    .map((x) => {
+      if (S.editU === x.id) {
+        return `<tr style="background:var(--card,#f4f6fa)">
+          <td colspan=4 style="padding:10px">
+            <div style="font-weight:bold;margin-bottom:6px">✏️ ${t("edit")}: ${esc(x.name)}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <input id="eu_name_${x.id}" value="${esc(x.name)}" placeholder="${t("name")}" style="flex:1;min-width:140px">
+              <input id="eu_uname_${x.id}" value="${esc(x.username)}" placeholder="${t("username")}" style="flex:1;min-width:140px">
+              <input id="eu_cls_${x.id}" type=number min=6 max=12 value="${x.class || 8}" placeholder="${t("cls")}" style="width:90px">
+            </div>
+            <button class=pri onclick="admSave('${x.id}')">💾 ${t("save")}</button>
+            <button onclick="admEdit(null)">❌ ${t("cancel")}</button>
+          </td>
+        </tr>`;
+      }
+      return `<tr>
+        <td><b>${esc(x.name)}</b><br><small style="color:var(--sub)">${esc(x.username)}</small></td>
+        <td>${t("cls")} ${x.class || 8}</td>
+        <td>${x.approved ? '<span class="badge-status">✔</span>' : '<span style="display:inline-flex;align-items:center;padding:2px 8px;background:#fef3c7;color:#b45309;border-radius:6px;font-size:12px;font-weight:bold">⏳ Pending</span>'}</td>
+        <td style="white-space:nowrap">
+          ${x.approved ? "" : `<button class="btn-approve" onclick="adm('approve','${x.id}')">${t("approve")}</button> `}
+          <button class="btn-action" onclick="admEdit('${x.id}')">✏️ ${t("edit")}</button>
+          <button class="btn-action" onclick="adm('reset','${x.id}')">🔑 ${t("reset")}</button>
+          <button onclick="admDelete(${x.id},'${esc(x.name)}')" style="color:#d9534f">🗑️ ${t("delete")}</button>
+        </td>
+      </tr>`;
+    })
+    .join("")}
+</table>` : `<p class=sub>${t("noStu")}</p>`}
+
+${admins.length ? `<h3>🛡️ ${t("admin")}</h3><table>${admins.map((x) => `<tr><td><b>${esc(x.name)}</b><br><small style="color:var(--sub)">${esc(x.username)}</small></td><td>${t("admin")}</td><td>✅</td><td><button class="btn-action" onclick="adm('reset','${x.id}')">🔑 ${t("reset")}</button></td></tr>`).join("")}</table>` : ""}
+`;
+        }
+
+        return `<div class=banner><h2>🛠️ ${t("admin")}</h2></div>
+<div class=row>
+  <div class=stat style="cursor:pointer" onclick="S.admTab='users';render()"><b>${students.length}</b>${t("student")}</div>
+  <div class=stat style="cursor:pointer" onclick="S.admTab='users';render()"><b>${teachers.length}</b>${t("teacher")}</div>
+  <div class=stat style="cursor:pointer" onclick="S.admTab='users';render()"><b>${u.filter((x) => !x.approved).length}</b>${t("pending")}</div>
+  <div class=stat style="cursor:pointer" onclick="S.admTab='lessons';render()"><b>${allLessons.length}</b>${t("lessons")}</div>
+  <div class=stat style="cursor:pointer" onclick="S.admTab='quizzes';render()"><b>${allQuizzes.length}</b>${t("quizzes")}</div>
+</div>
+
+<div style="display:flex;gap:8px;margin:16px 0 12px;flex-wrap:wrap;border-bottom:2px solid var(--border,#e2e8f0);padding-bottom:10px">
+  <button style="border-radius:20px;padding:6px 16px;font-weight:600;${curTab === 'users' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='users';render()">👥 ${t("users")}</button>
+  <button style="border-radius:20px;padding:6px 16px;font-weight:600;${curTab === 'lessons' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='lessons';render()">📚 ${t("lessons")}</button>
+  <button style="border-radius:20px;padding:6px 16px;font-weight:600;${curTab === 'quizzes' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='quizzes';render()">📝 ${t("quizzes")}</button>
+  <button style="border-radius:20px;padding:6px 16px;font-weight:600;${curTab === 'ann' ? 'background:#0d9488;color:#fff;border:1px solid #0d9488;box-shadow:0 4px 14px rgba(13,148,136,0.25)' : 'background:#fff;color:#334155;border:1px solid #e2e8f0'}" onclick="S.admTab='ann';render()">📢 ${t("ann")}</button>
+</div>
+
+${contentHtml}`;
+      }
+      async function adm(a, id) {
+        const b = { id };
+        if (a === "reset") {
+          b.password = prompt(t("pw") || "Enter new password:");
+          if (!b.password) return;
+        }
+        const endpoint = a === "reset" ? "/api/admin/reset" : "/api/admin/approve";
+        const res = await api(endpoint, "POST", b);
+        if (res && res.error) {
+          alert(t(res.error) || res.error);
+        } else {
+          boot();
+        }
+      }
+      function admEdit(id) {
+        S.editU = S.editU === id ? null : id;
+        render();
+      }
+      async function admSave(id) {
+        const u = (S.users || []).find((x) => String(x.id) === String(id));
+        if (!u) return;
+        const nameEl = g("eu_name_" + id);
+        const unameEl = g("eu_uname_" + id);
+        if (!nameEl || !unameEl) return;
+        const name = nameEl.value.trim();
+        const username = unameEl.value.trim();
+        if (!name || !username) {
+          alert("Please provide both name and username");
+          return;
+        }
+        const b = { id, name, username };
+        if (u.role === "teacher") {
+          const sEl = g("eu_subj_" + id);
+          if (sEl) b.subject = sEl.value;
+          const cEl = g("eu_cls_teach_" + id);
+          if (cEl) b.class = +cEl.value || 8;
+        } else if (u.role === "student") {
+          const cEl = g("eu_cls_" + id);
+          if (cEl) b.class = +cEl.value || 8;
+        }
+        try {
+          const res = await api("/api/admin/update-user", "POST", b);
+          if (res && res.error) {
+            alert(t(res.error) || res.error || "Update failed");
+            return;
+          }
+          S.editU = null;
+          boot();
+        } catch (e) {
+          alert("Failed to update user");
+        }
+      }
+      async function admDelete(id, name) {
+        name = name || 'this user';
+        if (!confirm((t("confirmDelete") || "Are you sure you want to delete this user?") + "\n\n" + name)) return;
+        try {
+          const res = await api("/api/admin/delete-user", "POST", { id });
+          if (res && res.error) {
+            alert(t(res.error) || res.error || "Delete failed");
+          } else {
+            boot();
+          }
+        } catch (e) {
+          alert("Delete failed: " + (e.message || e));
+        }
+      }
+      function setL(l) {
+        S.lang = l;
+        localStorage.lang = l;
+        document.documentElement.lang = l;
+        render();
+      }
+      function footerV() {
+        if (S.user) {
+          return `<footer>👤 <b>${esc(S.user.name)}</b> (${t(S.user.role)}) · Developed by Piyush and Team</footer>`;
+        }
+        return "<footer>Developed by Piyush and Team</footer>";
+      }
+      function render() {
+        const u = g("un") && g("un").value,
+          p = g("pw") && g("pw").value,
+          nm = g("nm") && g("nm").value,
+          cl = g("cl") && g("cl").value,
+          tc = g("cl_teach") && g("cl_teach").value,
+          sr = g("sub_reg") && g("sub_reg").value;
+        if (sr) S.regSub = sr;
+        if (tc) S.regTeachCls = +tc;
+        let b;
+        if (!S.user) b = landV();
+        else if (!S.c) b = `<main><p>${t("load")}</p></main>`;
+        else
+          b =
+            "<main>" +
+            { student: studV, teacher: teachV, admin: admV }[S.user.role]() +
+            "</main>";
+        g("app").innerHTML =
+          hdr() +
+          b +
+          footerV() +
+          (S.toast ? `<div class=toast>${S.toast}</div>` : "");
+        if (u && g("un")) g("un").value = u;
+        if (p && g("pw")) g("pw").value = p;
+        if (nm && g("nm")) g("nm").value = nm;
+        if (cl && g("cl")) g("cl").value = cl;
+        if (S.regTeachCls && g("cl_teach")) g("cl_teach").value = S.regTeachCls;
+        if (S.regSub && g("sub_reg")) g("sub_reg").value = S.regSub;
+      }
+      addEventListener("keydown", (e) => {
+        if (e.key == "Enter" && !S.user && g("un")) doAuth();
+      });
+      addEventListener("online", () => {
+        if (S.user && S.user.role == "student") flush();
+        render();
+      });
+      addEventListener("offline", render);
+      if ("serviceWorker" in navigator)
+        navigator.serviceWorker.register("/sw.js");
+      fetch("/api/config")
+        .then((r) => r.json())
+        .then((c) => {
+          S.cfg = c;
+          localStorage.cfg = JSON.stringify(c);
+        })
+        .catch(() => {
+          S.cfg = JSON.parse(localStorage.cfg || "{}");
+        })
+        .finally(() => (S.user ? boot() : render()));
+    </script>
+  </body>
+</html>

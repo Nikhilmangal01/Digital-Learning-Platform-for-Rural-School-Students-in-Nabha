@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Teacher Login - Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      // Auto-redirect if already logged in as teacher
+      if (S.token && S.user && S.user.role === 'teacher') {
+        window.location.href = '/teacher/dashboard.html';
+      }
+
+      let isReg = false;
+      let curriculaList = [];
+
+      async function init() {
+        const res = await api("/api/public/curricula");
+        if (res && res.curricula) curriculaList = res.curricula;
+        render();
+      }
+
+      function render() {
+        document.getElementById("app").innerHTML = `
+          ${hdr()}
+          <div class="wrap" style="flex:1">
+            <div class="auth-container">
+              <div style="text-align:center;margin-bottom:20px">
+                <span style="font-size:2.4rem">👩‍🏫</span>
+                <h2 style="margin:6px 0">${t("teacher")} ${isReg ? t("register") : t("login")}</h2>
+                <small style="color:var(--sub)">${t("app")}</small>
+              </div>
+
+              <div class="auth-tabs">
+                <button class="auth-tab ${!isReg ? 'active' : ''}" onclick="isReg=false;render()">🔑 ${t("login")}</button>
+                <button class="auth-tab ${isReg ? 'active' : ''}" onclick="isReg=true;render()">📝 ${t("register")}</button>
+              </div>
+
+              ${
+                isReg
+                  ? `
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <label style="font-weight:600;font-size:0.9rem">${t("name")}</label>
+                    <input id="teach_name" placeholder="${t("name")}" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("username")}</label>
+                    <input id="teach_uname" placeholder="${t("username")}" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("password")}</label>
+                    <input id="teach_pw" type="password" placeholder="${t("password")}" />
+
+                    <label style="font-weight:600;font-size:0.9rem">📜 Select Curriculum Board</label>
+                    <select id="teach_curriculum">
+                      ${curriculaList.length ? curriculaList.map(c => `
+                        <option value="${c.code}">📜 ${esc(c.code)} - ${esc(c.name)}</option>
+                      `).join("") : `<option value="PSEB">📜 PSEB - Punjab School Education Board</option><option value="CBSE">📜 CBSE - Central Board of Secondary Education</option>`}
+                    </select>
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("subject")}</label>
+                    <select id="teach_subj">
+                      ${["Maths", "Science", "English", "Punjabi"]
+                        .map((s) => `<option value="${s}">${t(s)}</option>`)
+                        .join("")}
+                    </select>
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("assignedClass")}</label>
+                    <select id="teach_cls">
+                      ${[6, 7, 8, 9, 10, 11, 12]
+                        .map((c) => `<option value="${c}" ${c === 8 ? "selected" : ""}>${t("cls")} ${c}</option>`)
+                        .join("")}
+                    </select>
+
+                    <button class="pri" onclick="doRegister()" style="margin-top:14px;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb)">✨ ${t("register")}</button>
+                  </div>
+                `
+                  : `
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <label style="font-weight:600;font-size:0.9rem">${t("username")}</label>
+                    <input id="teach_uname" placeholder="${t("username")}" value="teacher1" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("password")}</label>
+                    <input id="teach_pw" type="password" placeholder="${t("password")}" value="pass123" />
+
+                    <button class="pri" onclick="doLogin()" style="margin-top:14px;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb)">🚀 ${t("login")}</button>
+                  </div>
+                `
+              }
+
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--b);display:flex;justify-content:space-between;font-size:0.9rem">
+                <a href="/" class="nav-link">← ${t("back")} to Home</a>
+                <a href="/student/login.html" class="nav-link">🎒 Student Login</a>
+              </div>
+            </div>
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      async function doLogin() {
+        const uEl = g("teach_uname");
+        const pEl = g("teach_pw");
+        if (!uEl || !pEl) return;
+        const username = uEl.value.trim();
+        const password = pEl.value;
+        if (!username || !password) {
+          alert("Please fill in username and password");
+          return;
+        }
+        showToast("Logging in...");
+        const res = await api("/api/login", "POST", { username, password, role: "teacher" });
+        if (res && res.token) {
+          S.token = res.token;
+          S.user = res.user;
+          localStorage.token = res.token;
+          localStorage.user = JSON.stringify(res.user);
+          window.location.href = "/teacher/dashboard.html";
+        } else {
+          alert((res && res.error) ? t(res.error) : t("wrong"));
+        }
+      }
+
+      async function doRegister() {
+        const nEl = g("teach_name");
+        const uEl = g("teach_uname");
+        const pEl = g("teach_pw");
+        const sEl = g("teach_subj");
+        const cEl = g("teach_cls");
+        if (!nEl || !uEl || !pEl) return;
+        const name = nEl.value.trim();
+        const username = uEl.value.trim();
+        const password = pEl.value;
+        const subject = sEl ? sEl.value : "Maths";
+        const cls = +(cEl ? cEl.value : 8);
+
+        const currEl = g("teach_curriculum");
+        const curriculumCode = currEl ? currEl.value : "PSEB";
+
+        if (!name || !username || !password) {
+          alert("Please enter full name, username and password");
+          return;
+        }
+        showToast("Registering teacher...");
+        const res = await api("/api/register", "POST", {
+          name,
+          username,
+          password,
+          role: "teacher",
+          subject,
+          class: cls,
+          curriculumCode,
+        });
+
+        if (res && res.token) {
+          S.token = res.token;
+          S.user = res.user;
+          localStorage.token = res.token;
+          localStorage.user = JSON.stringify(res.user);
+          window.location.href = "/teacher/dashboard.html";
+        } else if (res && res.status === "wait") {
+          alert(t("wait"));
+          isReg = false;
+          render();
+        } else {
+          alert((res && res.error) ? t(res.error) : t("wrong"));
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
+

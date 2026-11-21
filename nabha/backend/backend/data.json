@@ -1,0 +1,394 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "name": "Harpreet Singh",
+      "role": "admin",
+      "class": 0,
+      "hash": "060367462d01dcee52bf8d39466e88542e4c5a0dbff6a7048aed0537c2134d04",
+      "approved": true,
+      "curriculumCode": "PSEB"
+    },
+    {
+      "id": 2,
+      "username": "teacher_manpreet",
+      "name": "Manpreet Kaur",
+      "role": "teacher",
+      "subject": "Maths",
+      "class": 0,
+      "hash": "90af4c84128317a1048d1a29aeb3b4ee53ad086a93a7cf334766a6681826fea7",
+      "approved": true,
+      "curriculumCode": "PSEB"
+    },
+    {
+      "id": 3,
+      "username": "teacher_gurdeep",
+      "name": "Gurdeep Singh",
+      "role": "teacher",
+      "subject": "Science",
+      "class": 0,
+      "hash": "90af4c84128317a1048d1a29aeb3b4ee53ad086a93a7cf334766a6681826fea7",
+      "approved": true,
+      "curriculumCode": "PSEB"
+    },
+    {
+      "id": 4,
+      "username": "simran_k",
+      "name": "Simranjit Kaur",
+      "role": "student",
+      "class": 8,
+      "hash": "c6ad26bd10026ec533f8d39941524e3eed2e085ab15c25970f9c1647eae0a8fd",
+      "approved": true,
+      "curriculumCode": "PSEB",
+      "schoolId": "SCH_NABHA_01",
+      "schoolName": "Govt Sen Sec School, Nabha"
+    },
+    {
+      "id": 5,
+      "username": "new_student",
+      "name": "New Student",
+      "role": "student",
+      "class": 8,
+      "hash": "c6ad26bd10026ec533f8d39941524e3eed2e085ab15c25970f9c1647eae0a8fd",
+      "approved": true,
+      "curriculumCode": "PSEB",
+      "schoolId": "SCH_NABHA_01",
+      "schoolName": "Govt Sen Sec School, Nabha"
+    },
+    {
+      "id": 1794926184066,
+      "username": "piyush",
+      "name": "piyush",
+      "role": "student",
+      "class": 8,
+      "hash": "d511ff62cec45db897c9fbd90f1a4cba44dfa3bb52d0a3aeae77613f811fecce",
+      "approved": true,
+      "curriculumCode": "PSEB",
+      "schoolId": "SCH_NABHA_01",
+      "schoolName": "Govt Sen Sec School, Nabha"
+    },
+    {
+      "id": 1794994422452,
+      "username": "vs",
+      "name": "vivek",
+      "role": "teacher",
+      "subject": "English",
+      "class": 0,
+      "hash": "0a4bbe37f2ae1dc1509db236329aad3d84e59724fa400fa11feb28164d4f30a6",
+      "approved": true,
+      "curriculumCode": "PSEB"
+    },
+    {
+      "id": 1795008330834,
+      "username": "nk",
+      "name": "Nikhil",
+      "role": "student",
+      "class": 6,
+      "hash": "e6030d4e137121b541ea130f10731dcaeb7c5d84623af956c5b9c7d8dc83fe99",
+      "approved": true,
+      "curriculumCode": "PSEB",
+      "schoolId": "SCH_NABHA_01",
+      "schoolName": "Govt Sen Sec School, Nabha"
+    }
+  ],
+  "lessons": [
+    {
+      "id": 1,
+      "s": "Maths",
+      "c": 6,
+      "t": {
+        "en": "Fractions",
+        "hi": "भिन्न",
+        "pa": "ਭਿੰਨ"
+      },
+      "n": {
+        "en": "Read this chapter carefully, then mark it complete and take the quiz."
+      },
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    },
+    {
+      "id": 2,
+      "s": "Maths",
+      "c": 8,
+      "t": {
+        "en": "Algebra Basics",
+        "hi": "बीजगणित की मूल बातें",
+        "pa": "ਬੀਜਗਣਿਤ ਦੀਆਂ ਬੁਨਿਆਦਾਂ"
+      },
+      "n": {
+        "en": "Read this chapter carefully, then mark it complete and take the quiz."
+      },
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    },
+    {
+      "id": 3,
+      "s": "Science",
+      "c": 7,
+      "t": {
+        "en": "Photosynthesis",
+        "hi": "प्रकाश संश्लेषण",
+        "pa": "ਪ੍ਰਕਾਸ਼ ਸੰਸ਼ਲੇਸ਼ਣ"
+      },
+      "n": {
+        "en": "Read this chapter carefully, then mark it complete and take the quiz."
+      },
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    },
+    {
+      "id": 4,
+      "s": "Science",
+      "c": 8,
+      "t": {
+        "en": "States of Matter",
+        "hi": "पदार्थ की अवस्थाएँ",
+        "pa": "ਪਦਾਰਥ ਦੀਆਂ ਅਵਸਥਾਵਾਂ"
+      },
+      "n": {
+        "en": "Read this chapter carefully, then mark it complete and take the quiz."
+      },
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    },
+    {
+      "id": 5,
+      "s": "English",
+      "c": 8,
+      "t": {
+        "en": "Nouns and Verbs",
+        "hi": "संज्ञा और क्रिया",
+        "pa": "ਨਾਂਵ ਅਤੇ ਕਿਰਿਆ"
+      },
+      "n": {
+        "en": "Read this chapter carefully, then mark it complete and take the quiz."
+      },
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    },
+    {
+      "id": 6,
+      "s": "Punjabi",
+      "c": 8,
+      "t": {
+        "en": "Punjabi Alphabet",
+        "hi": "पंजाबी वर्णमाला",
+        "pa": "ਪੰਜਾਬੀ ਵਰਣਮਾਲਾ"
+      },
+      "n": {
+        "en": "Read this chapter carefully, then mark it complete and take the quiz."
+      },
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": 1,
+      "lesson": 1,
+      "q": [
+        {
+          "q": {
+            "en": "What is 1/2 + 1/2?",
+            "hi": "1/2 + 1/2 कितना होता है?",
+            "pa": "1/2 + 1/2 ਕਿੰਨਾ ਹੁੰਦਾ ਹੈ?"
+          },
+          "o": [
+            "1",
+            "2",
+            "1/4"
+          ],
+          "a": 0
+        },
+        {
+          "q": {
+            "en": "Which is bigger, 1/2 or 1/4?",
+            "hi": "कौन बड़ा है, 1/2 या 1/4?",
+            "pa": "ਕਿਹੜਾ ਵੱਡਾ ਹੈ, 1/2 ਜਾਂ 1/4?"
+          },
+          "o": [
+            "1/2",
+            "1/4"
+          ],
+          "a": 0
+        }
+      ],
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    },
+    {
+      "id": 2,
+      "lesson": 3,
+      "q": [
+        {
+          "q": {
+            "en": "Plants make food using…",
+            "hi": "पौधे भोजन बनाने के लिए क्या उपयोग करते हैं?",
+            "pa": "ਪੌਦੇ ਭੋਜਨ ਬਣਾਉਣ ਲਈ ਕੀ ਵਰਤਦੇ ਹਨ?"
+          },
+          "o": [
+            {
+              "en": "Sunlight",
+              "hi": "सूर्य का प्रकाश",
+              "pa": "ਸੂਰਜ ਦੀ ਰੌਸ਼ਨੀ"
+            },
+            {
+              "en": "Sand",
+              "hi": "रेत",
+              "pa": "ਰੇਤ"
+            }
+          ],
+          "a": 0
+        },
+        {
+          "q": {
+            "en": "What do plants release?",
+            "hi": "पौधे क्या छोड़ते हैं?",
+            "pa": "ਪੌਦੇ ਕੀ ਛੱਡਦੇ ਹਨ?"
+          },
+          "o": [
+            {
+              "en": "Oxygen",
+              "hi": "ऑक्सीजन",
+              "pa": "ਆਕਸੀਜਨ"
+            },
+            {
+              "en": "Smoke",
+              "hi": "धुआँ",
+              "pa": "ਧੂੰਆਂ"
+            }
+          ],
+          "a": 0
+        }
+      ],
+      "curriculumCode": "PSEB",
+      "schoolId": "ALL"
+    }
+  ],
+  "prog": {
+    "4": {
+      "l": [
+        1,
+        2,
+        3
+      ],
+      "q": {
+        "1": 95,
+        "2": 100
+      }
+    },
+    "1794926184066": {
+      "l": [
+        1
+      ],
+      "q": {}
+    },
+    "1795008330834": {
+      "l": [
+        1
+      ],
+      "q": {}
+    },
+    "1795019629223": {
+      "l": [
+        1795021412448,
+        1795020221698
+      ],
+      "q": {}
+    },
+    "1795028489594": {
+      "l": [
+        2,
+        4,
+        5,
+        1795023683899,
+        6
+      ],
+      "q": {
+        "3": 0,
+        "1795015164173": 100
+      }
+    }
+  },
+  "ann": [
+    {
+      "text": "Welcome to the Nabha Digital Learning Platform!",
+      "by": "Nabha Learning Platform"
+    }
+  ],
+  "curricula": [
+    {
+      "code": "PSEB",
+      "name": "Punjab School Education Board",
+      "description": "Official state curriculum for Punjab state and aided schools.",
+      "classes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "subjects": [
+        "Maths",
+        "Science",
+        "English",
+        "Punjabi"
+      ],
+      "createdAt": "2026-11-19T14:13:15.383Z"
+    },
+    {
+      "code": "CBSE",
+      "name": "Central Board of Secondary Education",
+      "description": "National curriculum following NCERT standards.",
+      "classes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "subjects": [
+        "Maths",
+        "Science",
+        "English",
+        "Punjabi"
+      ],
+      "createdAt": "2026-11-19T14:13:15.385Z"
+    }
+  ],
+  "schools": [
+    {
+      "schoolId": "SCH_NABHA_01",
+      "name": "Govt Sen Sec School, Nabha",
+      "curriculumCode": "PSEB",
+      "city": "Nabha",
+      "state": "Punjab",
+      "active": true,
+      "createdAt": "2026-11-19T14:13:15.385Z"
+    },
+    {
+      "schoolId": "SCH_NABHA_02",
+      "name": "Model Senior Secondary School, Nabha",
+      "curriculumCode": "CBSE",
+      "city": "Nabha",
+      "state": "Punjab",
+      "active": true,
+      "createdAt": "2026-11-19T14:13:15.385Z"
+    },
+    {
+      "schoolId": "SCH_PATIALA_01",
+      "name": "Govt High School, Patiala",
+      "curriculumCode": "PSEB",
+      "city": "Patiala",
+      "state": "Punjab",
+      "active": true,
+      "createdAt": "2026-11-19T14:13:15.385Z"
+    }
+  ]
+}

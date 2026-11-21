@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Login - Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      let isReg = false;
+
+      function render() {
+        document.getElementById("app").innerHTML = `
+          ${hdr()}
+          <div class="wrap" style="flex:1">
+            <div class="auth-container">
+              <div style="text-align:center;margin-bottom:20px">
+                <span style="font-size:2.4rem">🎒</span>
+                <h2 style="margin:6px 0">${t("student")} ${isReg ? t("register") : t("login")}</h2>
+                <small style="color:var(--sub)">${t("app")}</small>
+              </div>
+
+              <div class="auth-tabs">
+                <button class="auth-tab ${!isReg ? 'active' : ''}" onclick="isReg=false;render()">🔑 ${t("login")}</button>
+                <button class="auth-tab ${isReg ? 'active' : ''}" onclick="isReg=true;render()">📝 ${t("register")}</button>
+              </div>
+
+              ${
+                isReg
+                  ? `
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <label style="font-weight:600;font-size:0.9rem">${t("name")}</label>
+                    <input id="stu_name" placeholder="${t("name")}" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("username")}</label>
+                    <input id="stu_uname" placeholder="${t("username")}" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("password")}</label>
+                    <input id="stu_pw" type="password" placeholder="${t("password")}" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("cls")}</label>
+                    <select id="stu_cls">
+                      ${[6, 7, 8, 9, 10, 11, 12]
+                        .map((c) => `<option value="${c}" ${c === 8 ? "selected" : ""}>${t("cls")} ${c}</option>`)
+                        .join("")}
+                    </select>
+
+                    <button class="pri" onclick="doRegister()" style="margin-top:14px;padding:12px">✨ ${t("register")}</button>
+                  </div>
+                `
+                  : `
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <label style="font-weight:600;font-size:0.9rem">${t("username")}</label>
+                    <input id="stu_uname" placeholder="${t("username")}" value="student1" />
+
+                    <label style="font-weight:600;font-size:0.9rem">${t("password")}</label>
+                    <input id="stu_pw" type="password" placeholder="${t("password")}" value="pass123" />
+
+                    <button class="pri" onclick="doLogin()" style="margin-top:14px;padding:12px">🚀 ${t("login")}</button>
+                  </div>
+                `
+              }
+
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--b);display:flex;justify-content:space-between;font-size:0.9rem">
+                <a href="/" class="nav-link">← ${t("back")} to Home</a>
+                <a href="/teacher/login.html" class="nav-link">👩‍🏫 Teacher Login</a>
+              </div>
+            </div>
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      async function doLogin() {
+        const uEl = g("stu_uname");
+        const pEl = g("stu_pw");
+        if (!uEl || !pEl) return;
+        const username = uEl.value.trim();
+        const password = pEl.value;
+        if (!username || !password) {
+          alert("Please fill in username and password");
+          return;
+        }
+        showToast("Logging in...");
+        const res = await api("/api/login", "POST", { username, password, role: "student" });
+        if (res && res.token) {
+          S.token = res.token;
+          S.user = res.user;
+          S.p = { l: [], q: {} };
+          localStorage.token = res.token;
+          localStorage.user = JSON.stringify(res.user);
+          // Prime with this student's isolated progress cache if available
+          if (res.user && res.user.id && localStorage["p_" + res.user.id]) {
+            try {
+              const cp = JSON.parse(localStorage["p_" + res.user.id]);
+              if (cp && cp.l) S.p = cp;
+            } catch (e) {}
+          }
+          window.location.href = "/student/dashboard.html";
+        } else {
+          alert((res && res.error) ? t(res.error) : t("wrong"));
+        }
+      }
+
+      async function doRegister() {
+        const nEl = g("stu_name");
+        const uEl = g("stu_uname");
+        const pEl = g("stu_pw");
+        const cEl = g("stu_cls");
+        if (!nEl || !uEl || !pEl) return;
+        const name = nEl.value.trim();
+        const username = uEl.value.trim();
+        const password = pEl.value;
+        const cls = +(cEl ? cEl.value : 8);
+
+        if (!name || !username || !password) {
+          alert("Please enter full name, username and password");
+          return;
+        }
+        showToast("Registering student...");
+        const res = await api("/api/register", "POST", {
+          name,
+          username,
+          password,
+          role: "student",
+          class: cls,
+        });
+
+        if (res && res.token) {
+          S.token = res.token;
+          S.user = res.user;
+          S.p = { l: [], q: {} };
+          localStorage.token = res.token;
+          localStorage.user = JSON.stringify(res.user);
+          window.location.href = "/student/dashboard.html";
+        } else if (res && res.status === "wait") {
+          alert(t("wait"));
+          isReg = false;
+          render();
+        } else {
+          alert((res && res.error) ? t(res.error) : t("wrong"));
+        }
+      }
+
+      render();
+    </script>
+  </body>
+</html>
+

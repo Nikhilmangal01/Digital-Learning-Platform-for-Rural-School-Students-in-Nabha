@@ -1,0 +1,62 @@
+# ==========================================
+# Nabha Digital Learning Platform - .gitignore
+# PIET/CS/FYP/PS019 | Developed by Piyush and Team
+# ==========================================
+
+# 1. Dependency Directories
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 2. Environment Variables & Secrets (Keep .env.example tracked)
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+!.env.example
+backend/.env
+# 3. Dynamic User Uploads & Attachments (Preserve empty directory via .gitkeep)
+uploads/*
+!uploads/.gitkeep
+nabha/uploads/*
+!nabha/uploads/.gitkeep
+
+# 4. Logs & Runtime Artifacts
+logs/
+*.log
+
+# 5. OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# 6. IDE & Editor Configurations
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 7. Temporary, Scratch & Local Test Artifacts
+test_*.xlsx
+test_*.json
+*.tmp
+*.temp
+.cache/
+.gemini/

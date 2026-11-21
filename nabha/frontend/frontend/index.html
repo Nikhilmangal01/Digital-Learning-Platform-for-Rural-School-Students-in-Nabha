@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nabha Digital Learning Platform</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      function render() {
+        const x = X[S.lang] || X.en;
+
+        document.getElementById("app").innerHTML = `
+          ${hdr({ land: false })}
+          <div class="wrap" style="flex:1">
+            <div class="hero">
+              <span class="tag">🌾 ${x.tag}</span>
+              <h1>${x.hero}</h1>
+              <p>${x.heroSub}</p>
+            </div>
+
+            <div class="grid" style="margin-bottom:28px">
+              <div class="feat"><h3>📶 ${x.f1}</h3><p>${x.f1d}</p></div>
+              <div class="feat"><h3>🗣️ ${x.f2}</h3><p>${x.f2d}</p></div>
+              <div class="feat"><h3>📈 ${x.f3}</h3><p>${x.f3d}</p></div>
+              <div class="feat"><h3>👥 ${x.f4}</h3><p>${x.f4d}</p></div>
+            </div>
+
+            <h2 style="text-align:center;margin:32px 0 16px">🎯 Select Your Role to Continue</h2>
+            
+            <div class="portal-grid">
+              <div class="portal-card" style="border-top:4px solid #10b981">
+                <div>
+                  <h3>🎒 ${t("student")}</h3>
+                  <p>Study lessons, read rich content notes, attempt interactive quizzes, and earn skill badges for your class.</p>
+                </div>
+                <div style="margin-top:14px">
+                  <a href="/student/login.html" class="pri portal-btn" style="display:block;text-align:center;text-decoration:none;width:100%">🔑 ${t("login")} / ${t("register")}</a>
+                </div>
+              </div>
+
+              <div class="portal-card" style="border-top:4px solid #3b82f6">
+                <div>
+                  <h3>👩‍🏫 ${t("teacher")}</h3>
+                  <p>Create lessons with multilingual study material, build quizzes for your assigned class & subject, and monitor students.</p>
+                </div>
+                <div style="margin-top:14px">
+                  <a href="/teacher/login.html" class="pri portal-btn" style="display:block;text-align:center;text-decoration:none;width:100%;background:linear-gradient(135deg,#3b82f6,#2563eb)">🔑 ${t("login")} / ${t("register")}</a>
+                </div>
+              </div>
+
+              <div class="portal-card" style="border-top:4px solid #8b5cf6">
+                <div>
+                  <h3>🛠️ ${t("admin")}</h3>
+                  <p>Manage teachers & students, view all lessons & quizzes by class and subject, and post school-wide announcements.</p>
+                </div>
+                <div style="margin-top:14px">
+                  <a href="/admin/login.html" class="pri portal-btn" style="display:block;text-align:center;text-decoration:none;width:100%;background:linear-gradient(135deg,#8b5cf6,#7c3aed)">🔑 ${t("admin")} ${t("login")}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      render();
+    </script>
+  </body>
+</html>
+

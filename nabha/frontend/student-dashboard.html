@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Dashboard - Nabha Digital Learning</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Gurmukhi&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=2.2" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+      // Auth Guard
+      if (!checkAuth('student', '/student/login.html')) {
+        // redirected
+      }
+
+      let activeSubj = 'all';
+
+      async function boot() {
+        if (!S.user) {
+          window.location.href = '/student/login.html';
+          return;
+        }
+
+        // Prime this student's isolated local progress first
+        const userKey = "p_" + S.user.id;
+        if (localStorage[userKey]) {
+          try {
+            const cached = JSON.parse(localStorage[userKey]);
+            if (cached && cached.l) {
+              S.p = { l: cached.l || [], q: cached.q || {} };
+            }
+          } catch (e) {}
+        } else {
+          S.p = { l: [], q: {} };
+        }
+
+        const [c, pRes, a] = await Promise.all([
+          api("/api/content"),
+          api("/api/progress"),
+          api("/api/announcements"),
+        ]);
+        if (c) S.c = c;
+        if (pRes) {
+          const p = pRes.progress || (pRes.l ? pRes : null);
+          if (p) {
+            const serverL = p.l || [];
+            const serverQ = p.q || {};
+            for (const lid of serverL) {
+              if (!S.p.l.some(x => String(x) === String(lid))) {
+                S.p.l.push(lid);
+              }
+            }
+            S.p.q = Object.assign({}, serverQ, S.p.q || {});
+            localStorage[userKey] = JSON.stringify(S.p);
+          }
+        }
+        if (a) S.ann = a;
+        render();
+      }
+
+      function profileV() {
+        const u = S.user || {};
+        return `
+        <div class="card" style="margin:16px 0;background:var(--card,#f9fafb);border-left:4px solid var(--p,#10b981)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h3 style="margin:0">👤 ${t("editProfile")}</h3>
+            <button onclick="S.profile=false;render()" style="padding:4px 8px;font-size:12px">✖️ ${t("close")}</button>
+          </div>
+          <p style="font-size:0.85rem;color:var(--sub);margin:0 0 12px">${t("profileHint")}</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+            <div>
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">${t("name")}</label>
+              <input id="prof_name" value="${esc(u.name || "")}" placeholder="${t("name")}" style="width:100%" />
+            </div>
+            <div>
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">${t("username")}</label>
+              <input id="prof_uname" value="${esc(u.username || "")}" placeholder="${t("username")}" style="width:100%" />
+            </div>
+            <div>
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:4px">${t("password")}</label>
+              <input id="prof_pw" type="password" placeholder="${t("newPasswordOptional")}" style="width:100%" />
+            </div>
+          </div>
+          <div style="background:#eef2ff;padding:8px 12px;border-radius:6px;font-size:0.85rem;color:#3730a3;margin-bottom:12px">
+            🔒 <b>${t("cls")}:</b> ${t("cls")} ${u.class || 8} · <small>${t("adminOnlyNotice")}</small>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="pri" onclick="saveMyProfile()">💾 ${t("save")}</button>
+            <button onclick="S.profile=false;render()">❌ ${t("cancel")}</button>
+          </div>
+        </div>`;
+      }
+
+      async function saveMyProfile() {
+        const nEl = g("prof_name");
+        const uEl = g("prof_uname");
+        const pEl = g("prof_pw");
+        if (!nEl || !uEl) return;
+        const name = nEl.value.trim();
+        const username = uEl.value.trim();
+        const password = pEl ? pEl.value : "";
+        if (!name || !username) {
+          alert(t("fillRequiredFields"));
+          return;
+        }
+        showToast("Saving profile...");
+        const res = await api("/api/user/profile", "POST", { name, username, password });
+        if (res && res.user) {
+          S.user = res.user;
+          localStorage.user = JSON.stringify(res.user);
+          S.profile = false;
+          showToast(t("profileSaved"));
+          render();
+        } else {
+          alert((res && res.error) ? t(res.error) : "Failed to update profile");
+        }
+      }
+
+      function lessonV() {
+        const l = (S.c && S.c.lessons || []).find((x) => x.id == S.cur.id);
+        if (!l) { S.cur = null; render(); return ""; }
+        const q = (S.c && S.c.quizzes || []).find((x) => x.lesson == l.id);
+        const d = S.p.l.some((x) => String(x) === String(l.id));
+        const lessonContent = (l.content && L(l.content)) || (l.cnt && L(l.cnt)) || (l.n && L(l.n)) || t("noContent");
+
+        return `
+          <button onclick="S.cur=null;render()" style="margin-bottom:10px">← ${t("back")}</button>
+          <div class="banner">
+            <h2>${esc(L(l.t))}</h2>
+            <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+              <span class="pill">📚 ${t(normSubj(l.s))}</span>
+              <span class="pill" style="background:var(--s1,#eef2ff)">🎓 ${t("cls")} ${l.c}</span>
+              ${l.authorName ? `<small style="align-self:center;opacity:0.9">👩‍🏫 ${esc(l.authorName)}</small>` : ""}
+            </div>
+          </div>
+          <div class="card" style="margin:16px 0;line-height:1.7;font-size:1.05rem;white-space:pre-wrap;border-left:4px solid var(--p,#3b82f6)">
+            <h4 style="margin:0 0 8px 0;color:var(--p,#3b82f6)">📖 ${t("lessonContent")}</h4>
+            <div>${esc(lessonContent)}</div>
+          </div>
+
+          ${(() => {
+            const atts = Array.isArray(l.attachments) ? l.attachments : [];
+            const drive = l.driveLink;
+            if (!atts.length && !drive) return "";
+
+            return `
+              <div class="card" style="margin:16px 0;border-left:4px solid #10b981;background:#f8fafc">
+                <h4 style="margin:0 0 12px 0;color:#059669;display:flex;align-items:center;gap:8px">
+                  📁 ${t("attachments") || "Notes & Study Materials"}
+                </h4>
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  ${atts.map(att => {
+                    if (att.type === 'image') {
+                      return `
+                        <div style="border:1px solid #cbd5e1;border-radius:8px;padding:12px;background:#fff">
+                          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+                            <b>🖼️ ${esc(att.title || att.filename || "Diagram / Image")}</b>
+                            <a href="${esc(att.url)}" download="${esc(att.filename || 'diagram.png')}" class="btn" style="padding:4px 10px;font-size:12px;background:#10b981;color:#fff;border-radius:4px;text-decoration:none">⬇️ ${t("downloadImg") || "Download Image"}</a>
+                          </div>
+                          <div style="text-align:center;background:#f1f5f9;border-radius:6px;padding:8px">
+                            <img src="${esc(att.url)}" alt="${esc(att.title || '')}" style="max-width:100%;max-height:400px;border-radius:4px;object-fit:contain" />
+                          </div>
+                        </div>
+                      `;
+                    }
+                    if (att.type === 'pdf') {
+                      return `
+                        <div style="border:1px solid #cbd5e1;border-radius:8px;padding:12px;background:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+                          <div style="display:flex;align-items:center;gap:10px">
+                            <span style="font-size:2rem">📄</span>
+                            <div>
+                              <b style="color:#1e293b">${esc(att.title || att.filename || "Study Notes PDF")}</b><br>
+                              <small style="color:#64748b">${att.sizeFormatted || "PDF Document"} · Available Offline</small>
+                            </div>
+                          </div>
+                          <div style="display:flex;gap:8px;align-items:center">
+                            <a href="${esc(att.url)}" target="_blank" class="btn" style="padding:6px 12px;font-size:13px;background:#3b82f6;color:#fff;border-radius:6px;text-decoration:none">👁️ View PDF</a>
+                            <a href="${esc(att.url)}" download="${esc(att.filename || 'notes.pdf')}" class="btn" style="padding:6px 12px;font-size:13px;background:#10b981;color:#fff;border-radius:6px;text-decoration:none">⬇️ ${t("downloadPdf") || "Download (Offline)"}</a>
+                          </div>
+                        </div>
+                      `;
+                    }
+                    if (att.type === 'link' || att.driveLink) {
+                      const linkUrl = att.driveLink || att.url;
+                      return `
+                        <div style="border:1px solid #cbd5e1;border-radius:8px;padding:12px;background:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+                          <div style="display:flex;align-items:center;gap:10px">
+                            <span style="font-size:2rem">📂</span>
+                            <div>
+                              <b style="color:#1e293b">${esc(att.title || "Google Drive Notes / Resources")}</b><br>
+                              <small style="color:#64748b">Cloud Study Material</small>
+                            </div>
+                          </div>
+                          <a href="${esc(linkUrl)}" target="_blank" rel="noopener noreferrer" class="btn" style="padding:6px 14px;font-size:13px;background:#059669;color:#fff;border-radius:6px;text-decoration:none">↗️ ${t("openDrive") || "Open Google Drive"}</a>
+                        </div>
+                      `;
+                    }
+                    return "";
+                  }).join("")}
+                  ${(drive && !atts.some(a => a.driveLink === drive)) ? `
+                    <div style="border:1px solid #cbd5e1;border-radius:8px;padding:12px;background:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+                      <div style="display:flex;align-items:center;gap:10px">
+                        <span style="font-size:2rem">📂</span>
+                        <div>
+                          <b style="color:#1e293b">Google Drive Notes / Resources</b><br>
+                          <small style="color:#64748b">${esc(drive)}</small>
+                        </div>
+                      </div>
+                      <a href="${esc(drive)}" target="_blank" rel="noopener noreferrer" class="btn" style="padding:6px 14px;font-size:13px;background:#059669;color:#fff;border-radius:6px;text-decoration:none">↗️ ${t("openDrive") || "Open Google Drive"}</a>
+                    </div>
+                  ` : ""}
+                </div>
+              </div>
+            `;
+          })()}
+
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            ${d ? `<span class="pill" style="background:#10b98120;color:#059669;font-weight:bold">✅ ${t("done")}</span>` : `<button class="pri" onclick="act('l',${l.id});render()">✔️ ${t("markDone")}</button>`}
+            ${q ? `<button class="pri" onclick="S.cur={k:'quiz',id:${q.id}};S.qa={};S.res=null;render()">📝 ${t("takeQuiz")}${S.p.q[q.id] != null ? " (" + t("score") + ": " + S.p.q[q.id] + "%)" : ""}</button>` : ""}
+          </div>
+        `;
+      }
+
+      function quizV() {
+        const q = (S.c && S.c.quizzes || []).find((x) => x.id == S.cur.id);
+        if (!q) { S.cur = null; render(); return ""; }
+        const questions = q.q || [];
+        return `
+          <button onclick="S.cur=null;render()" style="margin-bottom:12px">← ${t("back")}</button>
+          <div class="banner" style="margin-bottom:16px">
+            <h2 style="margin:0">📝 ${t("takeQuiz")}</h2>
+            <small style="opacity:0.9">${questions.length} ${t("questions") || "Questions"}</small>
+          </div>
+          ${questions.map((x, i) => {
+            const qTitle = (typeof x.q === "string") ? x.q : L(x.q);
+            const opts = Array.isArray(x.o) ? x.o : [];
+            return `
+              <div class="card" style="margin-bottom:16px;padding:16px;border-left:4px solid var(--p,#10b981)">
+                <div style="font-weight:700;font-size:1.05rem;margin-bottom:12px">
+                  <span style="display:inline-block;background:var(--p,#10b981);color:#fff;width:24px;height:24px;text-align:center;line-height:24px;border-radius:50%;font-size:0.85rem;margin-right:6px">${i + 1}</span>
+                  ${esc(qTitle)}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  ${opts.map((o, oi) => {
+                    const optText = (typeof o === "string" || typeof o === "number") ? String(o) : L(o);
+                    const isSelected = S.qa[i] === oi;
+                    return `
+                      <button type="button" class="opt ${isSelected ? 'sel' : ''}" style="text-align:left;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:1rem;${isSelected ? 'border:2px solid var(--p,#10b981);background:#10b98115;font-weight:600' : 'border:1px solid var(--b,#d1d5db);background:var(--c,#fff)'}" onclick="S.qa[${i}]=${oi};render()">
+                        <span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:bold;font-size:0.85rem;background:${isSelected ? 'var(--p,#10b981)' : '#f3f4f6'};color:${isSelected ? '#fff' : '#4b5563'};border:1px solid ${isSelected ? 'var(--p,#10b981)' : '#d1d5db'}">
+                          ${String.fromCharCode(65 + oi)}
+                        </span>
+                        <span style="flex:1">${esc(optText)}</span>
+                      </button>
+                    `;
+                  }).join("")}
+                </div>
+              </div>
+            `;
+          }).join("")}
+          <div style="margin-top:20px">
+            ${S.res != null ? `
+              <div class="card" style="background:#ecfdf5;border:1px solid #10b981;padding:16px;text-align:center;border-radius:12px">
+                <h3 style="margin:0 0 8px 0;color:#065f46">🏆 ${t("score")}: ${S.res}%</h3>
+                <p style="margin:0;color:#047857">${S.res >= 60 ? "Great job! Quiz completed successfully." : "Keep practicing! You can retake the quiz anytime."}</p>
+                <button class="pri" style="margin-top:12px" onclick="S.cur=null;render()">← ${t("back")} to Lessons</button>
+              </div>
+            ` : `<button class="pri" style="padding:12px 24px;font-size:1rem" onclick="subQ(${q.id})">🚀 ${t("submit")}</button>`}
+          </div>
+        `;
+      }
+
+      function subQ(id) {
+        const q = (S.c && S.c.quizzes || []).find((x) => x.id == id);
+        if (!q) return;
+        S.res = Math.round(
+          (q.q.filter((x, i) => S.qa[i] === x.a).length / q.q.length) * 100,
+        );
+        act("q", id, S.res);
+        if (q && q.lesson) {
+          act("l", q.lesson);
+        }
+        render();
+      }
+
+      function render() {
+        if (!S.c) {
+          document.getElementById("app").innerHTML = hdr() + `<div class="wrap" style="flex:1"><p class="sub">${t("load")}</p></div>` + footerV();
+          return;
+        }
+
+        const u = S.user || {};
+        const uCls = Number(u.class) || 8;
+        const allLessons = (S.c.lessons || []).filter((l) => Number(l.c) === uCls);
+        const filteredLessons = allLessons.filter((l) => activeSubj === 'all' || normSubj(l.s) === normSubj(activeSubj));
+        const doneCount = allLessons.filter((l) => S.p.l.some((x) => String(x) === String(l.id))).length;
+        const pct = allLessons.length ? Math.round((doneCount / allLessons.length) * 100) : 0;
+
+        let mainView = "";
+
+        if (S.cur && S.cur.k === "lesson") {
+          mainView = lessonV();
+        } else if (S.cur && S.cur.k === "quiz") {
+          mainView = quizV();
+        } else {
+          mainView = `
+            <div class="banner">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+                <div>
+                  <h2 style="margin:0">${esc(u.name)}</h2>
+                  <div style="display:flex;gap:6px;margin-top:6px">
+                    <span class="pill">🎒 ${t("cls")} ${uCls}</span>
+                    <span class="pill" style="background:#ffffff30">⭐ ${doneCount} / ${allLessons.length} ${t("done")}</span>
+                  </div>
+                </div>
+                <button onclick="S.profile=!S.profile;render()" style="background:#ffffff24;border-color:#ffffff40;color:#fff">
+                  ⚙️ ${t("editProfile")}
+                </button>
+              </div>
+            </div>
+
+            ${S.profile ? profileV() : ""}
+
+            <div class="row" style="margin:16px 0">
+              <div class="stat"><div class="circle" style="background:conic-gradient(var(--p) ${pct * 3.6}deg, var(--b) 0deg)"><span>${pct}%</span></div><b>${pct}%</b>${t("overall")}</div>
+              <div class="stat"><b>${doneCount}</b>${t("lessons")}</div>
+              <div class="stat"><b>${Object.keys(S.p.q || {}).length}</b>${t("quizzes")}</div>
+            </div>
+
+            <div style="display:flex;gap:8px;margin:16px 0;flex-wrap:wrap">
+              <button class="pill" style="padding:6px 14px;border:none;cursor:pointer;font-weight:600;${activeSubj === 'all' ? 'background:var(--p);color:#fff' : 'background:var(--c)'}" onclick="activeSubj='all';render()">🎓 ${t("allSubjects")}</button>
+              ${["Maths", "Science", "English", "Punjabi"].map((s) => `
+                <button class="pill" style="padding:6px 14px;border:none;cursor:pointer;font-weight:600;${activeSubj === s ? 'background:var(--p);color:#fff' : 'background:var(--c)'}" onclick="activeSubj='${s}';render()">${t(s)}</button>
+              `).join("")}
+            </div>
+
+            <h3>📚 ${t("lessons")} (${filteredLessons.length})</h3>
+            ${filteredLessons.length ? filteredLessons.map((l) => `
+              <div class="item" onclick="S.cur={k:'lesson',id:${l.id}};render()">
+                <span class="ic">${{ Maths: "➕", Science: "🔬", English: "🔤", Punjabi: "ਅ" }[normSubj(l.s)] || "📖"}</span>
+                <div class="gr">
+                  <b>${esc(L(l.t))}</b><br>
+                  <small>${t(normSubj(l.s))} · ${t("cls")} ${l.c}</small>
+                </div>
+                <span class="ck">${S.p.l.some((x) => String(x) === String(l.id)) ? "✅" : "›"}</span>
+              </div>
+            `).join("") : `<p class="sub">${t("noLessons")}</p>`}
+
+            <h3 style="margin-top:24px">📢 ${t("ann")}</h3>
+            ${(S.ann || []).length ? S.ann.map((a) => `
+              <div class="card" style="margin-bottom:8px">
+                <b>${esc(L(a.m))}</b><br>
+                <small style="color:var(--sub)">${new Date(a.at).toLocaleDateString()}</small>
+              </div>
+            `).join("") : `<p class="sub">${t("noAnn")}</p>`}
+          `;
+        }
+
+        document.getElementById("app").innerHTML = `
+          ${hdr()}
+          <div class="wrap" style="flex:1">
+            ${mainView}
+          </div>
+          ${footerV()}
+        `;
+      }
+
+      boot();
+    </script>
+  </body>
+</html>
+

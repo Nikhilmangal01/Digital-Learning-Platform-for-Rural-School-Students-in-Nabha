@@ -1,1 +1,14 @@
-{"name":"nabha-learning-platform","version":"1.0.0","scripts":{"start":"node server.js","dev":"node server.js"},"dependencies":{"express":"^4.19.2"}}
+{
+  "name": "nabha-learning-platform",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "reset-admin": "node scripts/reset-admin.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^4.19.2",
+    "mongodb": "^7.9.0"
+  }
+}
