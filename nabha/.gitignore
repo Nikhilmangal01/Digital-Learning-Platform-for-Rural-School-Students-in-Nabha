@@ -60,3 +60,16 @@ test_*.json
 *.temp
 .cache/
 .gemini/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.venv/
